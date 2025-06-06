@@ -31,7 +31,9 @@ public class UMovieImpl implements UMovie{
     }
 
     public void topColeccionesMasIngresos(){
-
+        for (int i = 0;i<getColecciones().length();i++){
+            continue;
+        }
         /*
         Top 5 de las colecciones que más ingresos generaron.
         Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
@@ -73,5 +75,45 @@ public class UMovieImpl implements UMovie{
         <id_usuario>,<genero>,<cantidad de califaciones sobre ese género>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
+    }
+
+    //Getter de la lista de películas
+    public ArrayList<Pelicula> getPeliculas() {
+        return peliculas;
+    }
+
+    //Setter de la lista de películas
+    public void setPeliculas(ArrayList peliculas) {
+        this.peliculas = peliculas;
+    }
+
+    //Getter de la lista de actores
+    public ArrayList<Actor> getActores() {
+        return actores;
+    }
+
+    //Setter de la lista de actores
+    public void setActores(ArrayList<Actor> actores) {
+        this.actores = actores;
+    }
+
+    //Getter de la lista de usuarios
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    //Setter de la lista de usuarios
+    public void setUsuarios(ArrayList<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    //Getter de la lista de colecciones
+    public ArrayList<Coleccion> getColecciones() {
+        return colecciones;
+    }
+
+    //Setter de la lista de colecciones
+    public void setColecciones(ArrayList<Coleccion> colecciones) {
+        this.colecciones = colecciones;
     }
 }
