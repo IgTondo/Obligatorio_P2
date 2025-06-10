@@ -1,15 +1,23 @@
 package entities;
 
-public class Coleccion {
+import tads.list.ArrayList;
+
+public class Coleccion implements Comparable<Coleccion>{
     private int id;
     private String nombre;
-    private int[] idsPeliculas;
+    private ArrayList<Integer> idsPeliculas;
 
     //Constructor de la clase Colección
-    public Coleccion(int id, String nombre, int[] idsPeliculas) {
+    public Coleccion(int id, String nombre, ArrayList<Integer> idsPeliculas) {
         this.id = id;
         this.nombre = nombre;
         this.idsPeliculas = idsPeliculas;
+    }
+
+    public Coleccion(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.idsPeliculas = new ArrayList<>(100);
     }
 
     //Getter del id de la colección
@@ -33,12 +41,21 @@ public class Coleccion {
     }
 
     //Getter de la lista de las ids de las películas de la colección
-    public int[] getIdsPeliculas() {
+    public ArrayList<Integer> getIdsPeliculas() {
         return idsPeliculas;
     }
 
     //Setter de la lista de las ids de las películas de la colección
-    public void setIdsPeliculas(int[] idsPeliculas) {
+    public void setIdsPeliculas(ArrayList<Integer> idsPeliculas) {
         this.idsPeliculas = idsPeliculas;
+    }
+
+    public void addPeliculaToCollection(int idPelicula){
+        this.idsPeliculas.add(idPelicula);
+    }
+
+    @Override
+    public int compareTo(Coleccion coleccion) {
+        return 0;
     }
 }

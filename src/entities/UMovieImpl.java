@@ -1,12 +1,21 @@
 package entities;
 
-import tads.list.ArrayList;
+import tads.hashTable.OpenHashTable;
 
 public class UMovieImpl implements UMovie{
-    ArrayList<Pelicula> peliculas;
-    ArrayList<Actor> actores;
-    ArrayList<Usuario> usuarios;
-    ArrayList<Coleccion> colecciones;
+    public OpenHashTable peliculas;
+    public OpenHashTable actores;
+    public OpenHashTable usuarios;
+    public OpenHashTable colecciones;
+    public OpenHashTable calificaciones;
+
+    public UMovieImpl(){
+        this.peliculas = new OpenHashTable(469181);
+        this.actores = new OpenHashTable();
+        this.usuarios = new OpenHashTable();
+        this.colecciones = new OpenHashTable();
+        this.calificaciones = new OpenHashTable();
+    }
 
     public void topPeliculasMasCalificacionesPorIdioma(){
 
@@ -14,7 +23,7 @@ public class UMovieImpl implements UMovie{
         Top 5 de las películas que más calificaciones por idioma.
         Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
 
-        <id_pelicula>, <titulo_pelicula>,<total_calificaciones>,<idoma>
+        <id_pelicula>, <titulo_pelicula>,<total_calificaciones>,<idioma>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
     }

@@ -1,15 +1,23 @@
 package entities;
 
-public class Director {
+import tads.list.ArrayList;
+
+public class Director implements Comparable<Director>{
     private int idDirector;
     private String nombre;
-    private int[] peliculasDirigidas;
+    private ArrayList<Integer> peliculasDirigidas;
 
     //Constructor de la clase Director
-    public Director(int idDirector, String nombre, int[] peliculasDirigidas) {
+    public Director(int idDirector, String nombre, ArrayList<Integer> peliculasDirigidas) {
         this.idDirector = idDirector;
         this.nombre = nombre;
         this.peliculasDirigidas = peliculasDirigidas;
+    }
+
+    public Director(int idDirector, String nombre) {
+        this.idDirector = idDirector;
+        this.nombre = nombre;
+        this.peliculasDirigidas = new ArrayList<>(1000);
     }
 
     //Getter de la id del director
@@ -33,12 +41,17 @@ public class Director {
     }
 
     //Getter de la lista de las películas que dirigió el director
-    public int[] getPeliculasDirigidas() {
+    public ArrayList<Integer> getPeliculasDirigidas() {
         return peliculasDirigidas;
     }
 
     //Setter de la lista de las películas que dirigió el director
-    public void setPeliculasDirigidas(int[] peliculasDirigidas) {
+    public void setPeliculasDirigidas(ArrayList<Integer> peliculasDirigidas) {
         this.peliculasDirigidas = peliculasDirigidas;
+    }
+
+    @Override
+    public int compareTo(Director director) {
+        return 0;
     }
 }

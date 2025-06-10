@@ -1,17 +1,18 @@
 package entities;
 
+import tads.list.ArrayList;
 import java.util.Date;
 
-public class Pelicula {
+public class Pelicula implements Comparable<Pelicula>{
     private int idPelicula;
     private Date fechaDeEstreno;
     private String idiomaOriginal;
-    private String[] genero;
+    private ArrayList<String> genero;
     private String director;
     private int ingreso;
 
     //Constructor de la clase Película
-    public Pelicula(int idPelicula, Date fechaDeEstreno, String idiomaOriginal, String[] genero, String director, int ingreso) {
+    public Pelicula(int idPelicula, Date fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, String director, int ingreso) {
         this.idPelicula = idPelicula;
         this.fechaDeEstreno = fechaDeEstreno;
         this.idiomaOriginal = idiomaOriginal;
@@ -51,12 +52,12 @@ public class Pelicula {
     }
 
     //Getter del género de la película
-    public String[] getGenero() {
+    public ArrayList<String> getGenero() {
         return genero;
     }
 
     //Setter del género de la película
-    public void setGenero(String[] genero) {
+    public void setGenero(ArrayList<String> genero) {
         this.genero = genero;
     }
 
@@ -78,6 +79,11 @@ public class Pelicula {
     //Setter del director de la película
     public void setIngreso(int ingreso) {
         this.ingreso = ingreso;
+    }
+
+    @Override
+    public int compareTo(Pelicula pelicula) {
+        return 0;
     }
 }
 

@@ -2,7 +2,7 @@ package entities;
 
 import java.util.Date;
 
-public class Calificacion {
+public class Calificacion implements Comparable<Calificacion>{
     private int id;
     private int idUsuario;
     private int idPelicula;
@@ -67,5 +67,10 @@ public class Calificacion {
     //Setter de la fecha de publicación de la calificación
     public void setFechaCalificacion(Date fechaCalificacion) {
         this.fechaCalificacion = fechaCalificacion;
+    }
+
+    @Override
+    public int compareTo(Calificacion calificacion) {
+        return 0;
     }
 }

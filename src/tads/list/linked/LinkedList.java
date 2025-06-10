@@ -4,7 +4,9 @@ import tads.list.List;
 import tads.list.Node;
 import tads.tree.heap.HeapArray;
 
-public class LinkedList<T extends Comparable<T>> implements List<T> {
+import java.util.Iterator;
+
+public class LinkedList<T extends Comparable<T>> implements List<T>, Iterable<T> {
     private Node<T> head;
     private Node<T> tail;
     private int length;
@@ -388,4 +390,12 @@ public class LinkedList<T extends Comparable<T>> implements List<T> {
         }
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListIterator<>(this.head, this);
+    }
+
+    protected Node<T> getHead() {
+        return head;
+    }
 }

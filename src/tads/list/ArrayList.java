@@ -1,8 +1,9 @@
 package tads.list;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
-public class ArrayList<T extends Comparable<T>> implements List<T>{
+public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
     private T[] data;
     private int length;
     private static final int INITIAL_CAPACITY = 10;
@@ -116,6 +117,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T>{
         }
         sb.append("]");
         return sb.toString();
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayListIterator<>(this.data, this.length);
     }
 }
 
