@@ -1,15 +1,10 @@
 import java.util.Scanner;
 import com.opencsv.*;
+import entities.UMovieImpl;
 
 public class Main {
     public static void main(String[] args) {
-
-
-
-
-
-
-
+        UMovieImpl um = new UMovieImpl();
         Scanner sc = new Scanner(System.in);
         String op;
 
@@ -24,7 +19,8 @@ public class Main {
             switch (op){
                 case "1":
                     //Llamada al método de carga de datos
-                    System.out.println("Carga de datos exitosa, tiempo de ejecución de la carga: ");
+                    System.out.println("Cargando los datos");
+                    um.cargaDatos();
                     break;
                 case "2":
                     menuConsultas(sc);

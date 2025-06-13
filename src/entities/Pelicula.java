@@ -1,18 +1,20 @@
 package entities;
 
 import tads.list.ArrayList;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 public class Pelicula implements Comparable<Pelicula>{
     private int idPelicula;
-    private Date fechaDeEstreno;
+    private String nombre;
+    private LocalDate fechaDeEstreno;
     private String idiomaOriginal;
     private ArrayList<String> genero;
     private String director;
-    private int ingreso;
+    private long ingreso;
 
     //Constructor de la clase Película
-    public Pelicula(int idPelicula, Date fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, String director, int ingreso) {
+    public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, String director, long ingreso) {
         this.idPelicula = idPelicula;
         this.fechaDeEstreno = fechaDeEstreno;
         this.idiomaOriginal = idiomaOriginal;
@@ -31,13 +33,21 @@ public class Pelicula implements Comparable<Pelicula>{
         this.idPelicula = idPelicula;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     //Getter de la fecha de estreno de la película
-    public Date getFechaDeEstreno() {
+    public LocalDate getFechaDeEstreno() {
         return fechaDeEstreno;
     }
 
     //Setter de la fecha de estreno de la película
-    public void setFechaDeEstreno(Date fechaDeEstreno) {
+    public void setFechaDeEstreno(LocalDate fechaDeEstreno) {
         this.fechaDeEstreno = fechaDeEstreno;
     }
 
@@ -72,7 +82,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     //Getter del ingreso de la película
-    public int getIngreso() {
+    public long getIngreso() {
         return ingreso;
     }
 
@@ -84,6 +94,19 @@ public class Pelicula implements Comparable<Pelicula>{
     @Override
     public int compareTo(Pelicula pelicula) {
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Pelicula{" +
+                "idPelicula=" + idPelicula +
+                ", nombre='" + nombre + '\'' +
+                ", fechaDeEstreno=" + fechaDeEstreno +
+                ", idiomaOriginal='" + idiomaOriginal + '\'' +
+                ", genero=" + genero +
+                ", director='" + director + '\'' +
+                ", ingreso=" + ingreso +
+                '}';
     }
 }
 

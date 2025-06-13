@@ -58,4 +58,13 @@ public class Coleccion implements Comparable<Coleccion>{
     public int compareTo(Coleccion coleccion) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Coleccion{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", idsPeliculas=" + idsPeliculas +
+                '}';
+    }
 }
