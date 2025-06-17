@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import com.opencsv.*;
 import entities.UMovieImpl;
 
 public class Main {
@@ -23,7 +22,7 @@ public class Main {
                     um.cargaDatos();
                     break;
                 case "2":
-                    menuConsultas(sc);
+                    menuConsultas(sc, um);
                     break;
                 case "3":
                     break;
@@ -36,7 +35,7 @@ public class Main {
 
     }
 
-    static void menuConsultas(Scanner sc){
+    static void menuConsultas(Scanner sc, UMovieImpl um){
         String op;
         do {
             System.out.println("1. Top 5 de las películas que más calificaciones por idioma.");
@@ -56,7 +55,7 @@ public class Main {
                     //call a la f2
                     break;
                 case "3":
-                    //call a la f3
+                    um.topColeccionesMasIngresos();  // ✅ llamada al método real
                     break;
                 case "4":
                     //call a la f4

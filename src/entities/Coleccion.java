@@ -67,4 +67,14 @@ public class Coleccion implements Comparable<Coleccion>{
                 ", idsPeliculas=" + idsPeliculas +
                 '}';
     }
+    private long ingresoTotal = 0;
+
+    public long getIngresoTotal() {
+        return ingresoTotal;
+    }
+
+    public void setIngresoTotal(long ingresoTotal) {
+        this.ingresoTotal = ingresoTotal;
+    }
+
 }
