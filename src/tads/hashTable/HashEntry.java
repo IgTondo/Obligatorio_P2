@@ -2,11 +2,11 @@ package tads.hashTable;
 
 import java.util.Objects;
 
-public class HashEntry implements Comparable<HashEntry>{
-    String key;
-    Object value;
+public class HashEntry<K, V> implements Comparable<HashEntry<K, V>>{
+    K key;
+    V value;
 
-    public HashEntry(String key, Object value) {
+    public HashEntry(K key, V value) {
         this.key = key;
         this.value = value;
     }
@@ -15,7 +15,7 @@ public class HashEntry implements Comparable<HashEntry>{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HashEntry hashEntry = (HashEntry) o;
+        HashEntry<?, ?> hashEntry = (HashEntry<?, ?>) o;
         return Objects.equals(key, hashEntry.key);
     }
 
@@ -24,8 +24,16 @@ public class HashEntry implements Comparable<HashEntry>{
         return Objects.hash(key);
     }
 
+
     @Override
-    public int compareTo(HashEntry h){
-        return this.key.compareTo(h.key);
+    public int compareTo(HashEntry hashEntry) {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "HashEntry{" +
+                "key=" + key +
+                '}';
     }
 }

@@ -1,20 +1,37 @@
 package entities;
 
+import entities.cargaDatos.CargaDatos;
 import tads.hashTable.OpenHashTable;
+import tads.list.ArrayList;
+
 
 public class UMovieImpl implements UMovie{
-    public OpenHashTable peliculas;
-    public OpenHashTable actores;
-    public OpenHashTable usuarios;
-    public OpenHashTable colecciones;
-    public OpenHashTable calificaciones;
+    public OpenHashTable<Integer, Pelicula> peliculas;
+    public OpenHashTable<Integer, Actor> actores;
+    public OpenHashTable<Integer, Usuario> usuarios;
+    public OpenHashTable<Integer, Coleccion> colecciones;
+    public OpenHashTable<Integer, Director> directores;
+    public ArrayList<Calificacion> calificaciones;
 
     public UMovieImpl(){
-        this.peliculas = new OpenHashTable(469181);
-        this.actores = new OpenHashTable();
-        this.usuarios = new OpenHashTable();
-        this.colecciones = new OpenHashTable();
-        this.calificaciones = new OpenHashTable();
+        this.peliculas = new OpenHashTable<>();
+        this.actores = new OpenHashTable<>();
+        this.usuarios = new OpenHashTable<>();
+        this.colecciones = new OpenHashTable<>();
+        this.directores = new OpenHashTable<>();
+        this.calificaciones = new ArrayList<>();
+    }
+
+    @SuppressWarnings("unchecked")
+    public void cargaDatos(){
+        CargaDatos.cargaDatos();
+//        DataResult dr = CargaDatos.cargaDatos();
+//        this.peliculas = dr.getPeliculas();
+//        this.colecciones = dr.getColecciones();
+//        this.usuarios = dr.getUsuarios();
+//        this.calificaciones = dr.getCalificaciones();
+//        this.actores = dr.getActores();
+//        this.directores = dr.getDirectores();
     }
 
     public void topPeliculasMasCalificacionesPorIdioma(){
@@ -83,4 +100,6 @@ public class UMovieImpl implements UMovie{
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
     }
+
+
 }
