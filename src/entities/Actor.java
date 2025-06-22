@@ -57,4 +57,13 @@ public class Actor implements Comparable<Actor>{
     public int compareTo(Actor actor) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", peliculas=" + peliculas +
+                '}';
+    }
 }

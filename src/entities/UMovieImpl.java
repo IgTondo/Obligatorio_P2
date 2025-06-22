@@ -1,28 +1,37 @@
 package entities;
 
-import entities.aux.CargaDatos;
+import entities.cargaDatos.CargaDatos;
 import tads.hashTable.OpenHashTable;
+import tads.list.ArrayList;
+
 
 public class UMovieImpl implements UMovie{
     public OpenHashTable<Integer, Pelicula> peliculas;
     public OpenHashTable<Integer, Actor> actores;
     public OpenHashTable<Integer, Usuario> usuarios;
     public OpenHashTable<Integer, Coleccion> colecciones;
-    public OpenHashTable<Integer, Calificacion> calificaciones;
+    public OpenHashTable<Integer, Director> directores;
+    public ArrayList<Calificacion> calificaciones;
 
     public UMovieImpl(){
-        this.peliculas = new OpenHashTable<>(469181);
-        this.actores = new OpenHashTable<>(469181);
-        this.usuarios = new OpenHashTable<>(469181);
-        this.colecciones = new OpenHashTable<>(469181);
-        this.calificaciones = new OpenHashTable<>(469181);
+        this.peliculas = new OpenHashTable<>();
+        this.actores = new OpenHashTable<>();
+        this.usuarios = new OpenHashTable<>();
+        this.colecciones = new OpenHashTable<>();
+        this.directores = new OpenHashTable<>();
+        this.calificaciones = new ArrayList<>();
     }
 
     @SuppressWarnings("unchecked")
     public void cargaDatos(){
-        OpenHashTable[] temp = CargaDatos.cargaDatos();
-        this.peliculas = temp[0];
-        this.colecciones = temp[1];
+        CargaDatos.cargaDatos();
+//        DataResult dr = CargaDatos.cargaDatos();
+//        this.peliculas = dr.getPeliculas();
+//        this.colecciones = dr.getColecciones();
+//        this.usuarios = dr.getUsuarios();
+//        this.calificaciones = dr.getCalificaciones();
+//        this.actores = dr.getActores();
+//        this.directores = dr.getDirectores();
     }
 
     public void topPeliculasMasCalificacionesPorIdioma(){

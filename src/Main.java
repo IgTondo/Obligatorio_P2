@@ -7,7 +7,7 @@ public class Main {
         UMovieImpl um = new UMovieImpl();
         Scanner sc = new Scanner(System.in);
         String op;
-
+//        Runtime runtime = Runtime.getRuntime();
         do{
             System.out.println("Menú principal: ");
             System.out.println("\tSeleccione la opción que desee: ");
@@ -20,7 +20,16 @@ public class Main {
                 case "1":
                     //Llamada al método de carga de datos
                     System.out.println("Cargando los datos");
-                    um.cargaDatos();
+                    long startTime = System.currentTimeMillis();
+                    try {
+                        um.cargaDatos();
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
+                    long finalTime = System.currentTimeMillis();
+                    long timeElapsed = finalTime - startTime;
+                    System.out.println("Carga de datos exitosa, tiempo de ejecución de la carga: "+timeElapsed+"ms");
+//                    System.out.println(runtime.totalMemory()/1048576);
                     break;
                 case "2":
                     menuConsultas(sc);

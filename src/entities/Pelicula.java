@@ -16,6 +16,7 @@ public class Pelicula implements Comparable<Pelicula>{
     //Constructor de la clase Película
     public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, String director, long ingreso) {
         this.idPelicula = idPelicula;
+        this.nombre = nombre;
         this.fechaDeEstreno = fechaDeEstreno;
         this.idiomaOriginal = idiomaOriginal;
         this.genero = genero;
@@ -87,7 +88,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     //Setter del director de la película
-    public void setIngreso(int ingreso) {
+    public void setIngreso(long ingreso) {
         this.ingreso = ingreso;
     }
 
@@ -109,4 +110,3 @@ public class Pelicula implements Comparable<Pelicula>{
                 '}';
     }
 }
-

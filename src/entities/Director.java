@@ -54,4 +54,13 @@ public class Director implements Comparable<Director>{
     public int compareTo(Director director) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Director{" +
+                "idDirector=" + idDirector +
+                ", nombre='" + nombre + '\'' +
+                ", peliculasDirigidas=" + peliculasDirigidas +
+                '}';
+    }
 }

@@ -29,4 +29,11 @@ public class HashEntry<K, V> implements Comparable<HashEntry<K, V>>{
     public int compareTo(HashEntry hashEntry) {
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "HashEntry{" +
+                "key=" + key +
+                '}';
+    }
 }
