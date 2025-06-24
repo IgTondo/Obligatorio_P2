@@ -64,14 +64,13 @@ public class UMovieImpl implements UMovie{
 
         System.out.println("Top 5 películas en " + nombreIdioma + ":");
 
-        // Extraer hasta 5 películas (las de mayor rating)
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 5; i++) {                                      // Extraer hasta 5 películas (las de mayor rating)
             try {
                 Integer idPelicula = peliculasIdioma.pop().getIdPelicula();
                 Pelicula pelicula = peliculas.get(idPelicula);
 
                 if (pelicula != null) {
-                    System.out.println("<" + i + ">, <" + pelicula.getNombre() + ">, <" + pelicula.getNumRating() + ">, <" + nombreIdioma + ">");
+                    System.out.println(i + ", " + pelicula.getNombre() + ", " + pelicula.getNumRating() + ", " + nombreIdioma + "");
                 }
             } catch (Exception e) {
                 // No hay más películas en la cola
@@ -117,6 +116,14 @@ public class UMovieImpl implements UMovie{
 
     public void ActorMasCalificacionesPorMes(){
 
+        ArrayList<Integer> peliculasMes = new ArrayList<>();
+
+        for (int i = 1; i <13 ; i++) {
+
+            peliculasMes = buscarCalificacionesPorMes(i);
+        }
+
+
         /*
         Actor con más calificaciones recibidas en cada mes del año.
          Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
@@ -124,6 +131,11 @@ public class UMovieImpl implements UMovie{
          <mes>,<nombre_actor>,<cantidad_peliculas>,<cantidad de calificaciones>
          Tiempo de ejecución de la consulta: <tiempo_ejecucion>
          */
+    }
+
+    public void ActorMasVisto(ArrayList<Calificacion> calificacionesMes) {
+        for (Calificacion calificacion : calificacionesMes) {
+        }
     }
 
     public void usuariosMasCalificacionesPorGenero(){
@@ -163,6 +175,19 @@ public class UMovieImpl implements UMovie{
         }
 
         return peliculasIdioma;
+    }
+
+    public ArrayList<Integer> buscarCalificacionesPorMes(int mes){
+
+        ArrayList<Integer> calificacionesMes = new ArrayList<>();
+
+        for (Calificacion calificacion : calificaciones) {
+            if (calificacion.getFechaCalificacion().getMonthValue() == mes) {
+                calificacionesMes.add(calificacion.getIdPelicula());
+            }
+        }
+
+        return calificacionesMes;
     }
 
 

@@ -64,7 +64,7 @@ public class Main {
                     um.topPeliculasMasCalificacionesPorIdioma();
                     long finalTime = System.currentTimeMillis();
                     long timeElapsed = finalTime - startTime;
-                    System.out.println("Carga de datos exitosa, tiempo de ejecución de la carga: "+timeElapsed+"ms");
+                    System.out.println("Tiempo de ejecución de la consulta: "+timeElapsed+"ms");
                     System.out.println();
                     break;
                 case "2":
@@ -77,7 +77,12 @@ public class Main {
                     //call a la f4
                     break;
                 case "5":
-                    //call a la f5
+                    long startTime5 = System.currentTimeMillis();
+                    um.ActorMasCalificacionesPorMes();
+                    long finalTime5 = System.currentTimeMillis();
+                    long timeElapsed5 = finalTime5 - startTime5;
+                    System.out.println("Tiempo de ejecución de la consulta: "+timeElapsed5+"ms");
+                    System.out.println();
                     break;
                 case "6":
                     //call a la f6
