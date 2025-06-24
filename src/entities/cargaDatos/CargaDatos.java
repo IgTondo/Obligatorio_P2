@@ -22,7 +22,7 @@ public class CargaDatos {
     private static final OpenHashTable<Integer, Coleccion> colecciones = new OpenHashTable<>(45587);
     private static final OpenHashTable<Integer, Usuario> usuarios = new OpenHashTable<>(170000);
     private static final OpenHashTable<Integer, Director> directores = new OpenHashTable<>(32768);
-    private static final OpenHashTable<Integer, Actor> actores = new OpenHashTable<>(65536);
+    private static final OpenHashTable<Integer, Actor> actores = new OpenHashTable<>(250000);
     private static final ArrayList<Calificacion> calificaciones = new ArrayList<>(5000000);
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -33,6 +33,7 @@ public class CargaDatos {
     public static void cargaDatos() {
         cargaPelis();
         cargaReviews();
+        cargaCreditos();
 //        DataResult res = new DataResult();
 //        res.setPeliculas(peliculas);
 //        res.setColecciones(colecciones);
@@ -93,7 +94,7 @@ public class CargaDatos {
                         continue;
                     }
 
-                    Pelicula p = new Pelicula(id, nombre, fechaEstreno, idiomaOriginal, generos, "", ingreso);
+                    Pelicula p = new Pelicula(id, nombre, fechaEstreno, idiomaOriginal, generos, ingreso);
                     try {
                         peliculas.put(id, p);
                     }catch (Exception e){
@@ -185,6 +186,76 @@ public class CargaDatos {
         }
     }
 
+    private static void cargaCreditos(){
+        String csvFilePath = "src/data/credits.csv";
+        long processedLines = 0;
+
+        try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(csvFilePath)))) {
+
+            String[] line;
+            reader.skip(1);
+            while ((line = reader.readNext()) != null) {
+                processedLines++;
+
+                if (line.length < 3) {
+                    System.err.println("Skipping malformed credits line " + processedLines + ": Not enough columns. Line: " + String.join(",", line));
+                    continue;
+                }
+
+                try {
+                    int movieId = Integer.parseInt(line[2]);
+                    Pelicula movie = peliculas.get(movieId);
+                    if (movie == null){
+                        continue;
+                    }
+
+                    String actorsJsonString = line[0]; // Get actors string
+                    if (actorsJsonString != null && !actorsJsonString.isEmpty()) {
+                        try {
+                            ArrayList<Actor> parsedActors = extractActorsFromString(actorsJsonString);
+                            for (Actor actor : parsedActors) {
+                                Actor existing = actores.get(actor.getId());
+                                if (existing == null) {
+                                    actores.put(actor.getId(), actor);
+                                    existing = actor;
+                                }
+                                existing.addPelicula(movieId);
+                            }
+                        }catch (Exception parseE){
+                            System.err.println("Parsing error for actor on line " + processedLines + ": " + parseE.getMessage());
+                        }
+                    }
+
+                    String directorsJson = line[1];
+                    if (directorsJson != null && !directorsJson.isEmpty() && !directorsJson.equals("[]")) {
+                        try {
+                            ArrayList<Director> directoresPelicula = extractDirectorFast(directorsJson);
+                            if (directoresPelicula.isEmpty()) {
+                                continue;
+                            }
+                            for (Director d : directoresPelicula) {
+                                Director dir = directores.get(d.getIdDirector());
+                                if (dir == null) {
+                                    dir = d;
+                                    directores.put(dir.getIdDirector(), dir);
+                                }
+                                movie.addDirector(dir.getIdDirector());
+                                dir.addPelicula(movieId);
+                            }
+                        }catch (Exception parseE){
+                            System.err.println("Parsing error for director on line " + processedLines + ": " + parseE.getMessage());
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Data parsing error on credits line " + processedLines + ": " + e.getMessage() + " - Line: " + String.join(",", line));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.err.println("Error reading credits CSV file " + csvFilePath + ": " + e.getMessage());
+        }
+    }
+
     private static String repairPythonDictLikeString(String input) {
         String jsonInput = input;
 
@@ -192,9 +263,109 @@ public class CargaDatos {
                 .replace("True", "true")
                 .replace("False", "false");
 
-        jsonInput = jsonInput.replaceAll("(?<![\\w])'([\\w]+)'(?=\\s*:)", "\"$1\"");  // Keys
-        jsonInput = jsonInput.replaceAll("(?<=:\\s*)'(.*?)'", "\"$1\"");
+        jsonInput = jsonInput.replaceAll("'(\\w+)':", "\"$1\":");  // Keys
+        jsonInput = jsonInput.replaceAll(": '([^']*)'", ": \"$1\"");
 
         return jsonInput;
+    }
+
+    private static ArrayList<Actor> extractActorsFromString(String castField) {
+        ArrayList<Actor> actors = new ArrayList<>();
+        int idx = 0;
+        int length = castField.length();
+
+        while (idx < length) {
+            int idKey = castField.indexOf("'id':", idx);
+            if (idKey == -1) break;
+
+            int idStart = castField.indexOf(":", idKey) + 1;
+            int idEnd = castField.indexOf(",", idStart);
+            if (idStart == 0 || idEnd == -1) break;
+
+            int id = Integer.parseInt(castField.substring(idStart, idEnd).trim());
+
+            int nameKey = castField.indexOf("'name':", idEnd);
+            if (nameKey == -1) break;
+
+            int nameStart = castField.indexOf("'", nameKey + 7) + 1;
+            int nameEnd = nameStart;
+            boolean escape = false;
+            while (nameEnd < castField.length()) {
+                char c = castField.charAt(nameEnd);
+                if (c == '\'' && !escape) break;
+                escape = (c == '\\');
+                nameEnd++;
+            }
+
+            String name = castField.substring(nameStart, nameEnd);
+            name = name.replace("\\\"", "\"").replace("\\'", "'");
+
+            actors.add(new Actor(id, name));
+            idx = nameEnd + 1;
+        }
+
+        return actors;
+    }
+
+    private static ArrayList<Director> extractDirectorFast(String crewStr) {
+        int pos = 0;
+        ArrayList<Director> directores = new ArrayList<>(10);
+        while (true) {
+
+            // Parse department
+            int deptIndex = crewStr.indexOf("'department'", pos);
+            if (deptIndex == -1) break;
+            int deptValueStart = crewStr.indexOf("'", deptIndex + 12) + 1;
+            int deptValueEnd = crewStr.indexOf("'", deptValueStart);
+            String department = crewStr.substring(deptValueStart, deptValueEnd);
+
+            if (!"Directing".equals(department)) {
+                pos = deptValueEnd;
+                continue;
+            }
+
+            int idIndex = crewStr.indexOf("'id'", deptValueEnd);
+            if (idIndex == -1) break;
+
+            // Parse id
+            int idValueStart = crewStr.indexOf(":", idIndex) + 1;
+            int idValueEnd = crewStr.indexOf(",", idValueStart);
+            int id = Integer.parseInt(crewStr.substring(idValueStart, idValueEnd).trim());
+
+            // Parse job
+            int jobIndex = crewStr.indexOf("'job'", idValueEnd);
+            if (jobIndex == -1) break;
+            int jobValueStart = crewStr.indexOf("'", jobIndex + 5) + 1;
+            int jobValueEnd = crewStr.indexOf("'", jobValueStart);
+            String job = crewStr.substring(jobValueStart, jobValueEnd);
+
+            if (!"Director".equals(job)) {
+                pos = jobValueEnd;
+                continue;
+            }
+
+            // Parse name
+            int nameIndex = crewStr.indexOf("'name'", jobValueEnd);
+            if (nameIndex == -1) break;
+            int nameValueStart = crewStr.indexOf("'", nameIndex + 6) + 1;
+
+            StringBuilder nameBuilder = new StringBuilder();
+            int i = nameValueStart;
+            for (i = nameValueStart; i < crewStr.length(); i++) {
+                char c = crewStr.charAt(i);
+                if (c == '\\' && i + 1 < crewStr.length() && crewStr.charAt(i + 1) == '\'') {
+                    nameBuilder.append('\'');
+                    i++;
+                } else if (c == '\'') {
+                    nameValueStart = i + 1;
+                    break;
+                } else {
+                    nameBuilder.append(c);
+                }
+            }
+            directores.add(new Director(id, nameBuilder.toString()));
+            pos = i + 1;
+        }
+        return directores;
     }
 }

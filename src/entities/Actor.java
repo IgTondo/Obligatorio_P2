@@ -16,7 +16,7 @@ public class Actor implements Comparable<Actor>{
     public Actor(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.peliculas = new ArrayList<>(10000);
+        this.peliculas = new ArrayList<>(50);
     }
 
     //Getter del id del actor
