@@ -6,17 +6,17 @@ import tads.list.linked.LinkedList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class OpenHashTable<K, V> implements HashTable<K, V> {
-    private static final int DEFAULT_CAPACITY = 16; // Power of 2 is good for hashing
+public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V>
+ {
+    private static final int DEFAULT_CAPACITY = 16;
+
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private LinkedList<HashEntry<K, V>>[] table;
     private int size;
     private int capacity;
-    private float loadFactor;
+    private final float loadFactor;
 
-    public OpenHashTable() {
-        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
-    }
+
 
     public OpenHashTable(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
@@ -176,6 +176,38 @@ public class OpenHashTable<K, V> implements HashTable<K, V> {
             }
         }
     }
+    @SuppressWarnings("unchecked")
+    public V[] getAllValues() {
+        V[] resultados = (V[]) new Object[this.size()]; // ✅ CAMBIO CLAVE: Object en lugar de Comparable
+        int idx = 0;
+
+        for (int i = 0; i < table.length; i++) {
+            for (HashEntry<K, V> entry : table[i]) {
+                resultados[idx++] = entry.value;
+            }
+        }
+
+        return resultados;
+    }
+
+    public tads.list.ArrayList<V> values() {
+        tads.list.ArrayList<V> lista = new tads.list.ArrayList<>();
+
+        for (int i = 0; i < table.length; i++) {
+            for (HashEntry<K, V> entry : table[i]) {
+                lista.add(entry.value);
+            }
+        }
+
+        return lista;
+    }
+
+
+
+
+
+
+
 
     @Override
     public String toString() {

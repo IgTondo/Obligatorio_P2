@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import com.opencsv.*;
 import entities.UMovieImpl;
 
 public class Main {
@@ -71,7 +70,7 @@ public class Main {
                     //call a la f2
                     break;
                 case "3":
-                    //call a la f3
+                    um.topColeccionesMasIngresos();  // ✅ llamada al método real
                     break;
                 case "4":
                     //call a la f4
