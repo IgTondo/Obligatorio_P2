@@ -2,10 +2,13 @@ package entities;
 
 import entities.cargaDatos.CargaDatos;
 import tads.hashTable.HashEntry;
+import org.apache.commons.lang3.tuple.Pair;
 import tads.hashTable.OpenHashTable;
 import tads.list.ArrayList;
 import tads.list.linked.LinkedList;
 import tads.tree.heap.HeapArray;
+
+import java.util.Map;
 
 
 public class UMovieImpl implements UMovie{
@@ -33,7 +36,11 @@ public class UMovieImpl implements UMovie{
         this.calificaciones = dr.getCalificaciones();
         this.actores = dr.getActores();
         this.directores = dr.getDirectores();
+        OpenHashTable[] temp = (OpenHashTable[]) CargaDatos.cargaDatos(); // Cast explícito
+        this.peliculas = temp[0];
+        this.colecciones = temp[1];
     }
+
 
     public void topPeliculasMasCalificacionesPorIdioma() {
         String[] idiomas = {"en", "es", "fr", "pt", "it"};
@@ -80,8 +87,7 @@ public class UMovieImpl implements UMovie{
         System.out.println();
     }
 
-    public void topPeliculasMejorCalificacionMedia(){
-
+    public void topPeliculasMejorCalificacionMedia() {
         /*
         Top 10 de las películas que mejor calificación media tienen por parte de los usuarios.
         Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
@@ -89,6 +95,62 @@ public class UMovieImpl implements UMovie{
         <id_pelicula>, <titulo_pelicula>,<calificacion_media>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
+
+        // Mapas para acumular suma de puntuaciones y conteo de calificaciones por película
+        OpenHashTable<Integer, Integer> conteoCalificaciones = new OpenHashTable<>(peliculas.size());
+        OpenHashTable<Integer, Float> sumaPuntajes = new OpenHashTable<>(peliculas.size());
+
+        // Paso 1 y 2: Recorremos las calificaciones para acumular
+        for (Calificacion cal : calificaciones) {
+            int idPelicula = cal.getIdPelicula();
+            float puntaje = cal.getPuntaje();
+
+            if (!conteoCalificaciones.contains(idPelicula)) {
+                conteoCalificaciones.put(idPelicula, 1);
+                sumaPuntajes.put(idPelicula, puntaje);
+            } else {
+                float sumaActual = sumaPuntajes.get(idPelicula);
+                sumaPuntajes.delete(idPelicula);
+                sumaPuntajes.put(idPelicula, sumaActual + puntaje);
+                int conteoActual = conteoCalificaciones.get(idPelicula);
+                conteoCalificaciones.delete(idPelicula);
+                conteoCalificaciones.put(idPelicula, conteoActual + 1);
+            }
+        }
+
+        // Crear lista auxiliar con promedio
+        ArrayList<PeliculaPromedio> candidatas = new ArrayList<>();
+
+        ArrayList<Pelicula> todasLasPeliculas = peliculas.getValues();
+        for (int i = 0; i < todasLasPeliculas.length(); i++) {
+            Pelicula pelicula = todasLasPeliculas.get(i);
+            int id = pelicula.getIdPelicula();
+
+            if (conteoCalificaciones.contains(id)) {
+                int total = conteoCalificaciones.get(id);
+                if (total > 100) {
+                    float suma = sumaPuntajes.get(id);
+                    float promedio = suma / total;
+                    candidatas.add(new PeliculaPromedio(pelicula, promedio));
+                }
+            }
+        }
+
+        candidatas.sort();
+
+        // Seleccionar top 10
+        ArrayList<Pelicula> top10 = new ArrayList<>();
+        int cantidad = Math.min(10, candidatas.length());
+        for (int i = 0; i < cantidad; i++) {
+            top10.add(candidatas.get(i).pelicula);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            PeliculaPromedio pp = candidatas.get(i);
+            Pelicula p = pp.pelicula;
+            float promedio = pp.promedio;
+            System.out.println(p.getIdPelicula()+", "+p.getNombre()+", "+promedio);
+        }
     }
 
     public void topColeccionesMasIngresos(){

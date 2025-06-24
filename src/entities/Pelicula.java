@@ -13,6 +13,7 @@ public class Pelicula implements Comparable<Pelicula>{
     private ArrayList<Integer> directores;
     private long ingreso;
     private int numRating;
+    private float promedioCalificaciones;
 
     //Constructor de la clase Película
     public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, long ingreso) {
@@ -101,6 +102,8 @@ public class Pelicula implements Comparable<Pelicula>{
     public void addNumRating() {
         this.numRating++;
     }
+
+
 
     @Override
     public int compareTo(Pelicula pelicula) {

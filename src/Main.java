@@ -67,7 +67,12 @@ public class Main {
                     System.out.println();
                     break;
                 case "2":
-                    //call a la f2
+                    System.out.println("Ejecutando consulta");
+                    long startTime = System.currentTimeMillis();
+                    um.topPeliculasMejorCalificacionMedia();
+                    long finalTime = System.currentTimeMillis();
+                    long timeElapsed = finalTime - startTime;
+                    System.out.println("Tiempo de ejecución de la consulta: "+timeElapsed+"ms\n");
                     break;
                 case "3":
                     um.topColeccionesMasIngresos();  // ✅ llamada al método real

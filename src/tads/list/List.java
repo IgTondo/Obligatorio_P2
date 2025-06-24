@@ -1,6 +1,6 @@
 package tads.list;
 
-public interface List<T extends Comparable<T>> {
+public interface List<T> {
     public void add(T num);
     public void add(T num, int index);
     public T get(int index);
