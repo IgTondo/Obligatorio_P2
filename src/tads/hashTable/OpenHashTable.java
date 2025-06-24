@@ -183,4 +183,8 @@ public class OpenHashTable<K, V> implements HashTable<K, V> {
                 "table=" + Arrays.toString(table) +
                 '}';
     }
+
+    public LinkedList<HashEntry<K, V>>[] getTable() {
+        return table;
+    }
 }

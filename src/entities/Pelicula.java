@@ -12,6 +12,7 @@ public class Pelicula implements Comparable<Pelicula>{
     private ArrayList<String> genero;
     private ArrayList<Integer> directores;
     private long ingreso;
+    private int numRating;
 
     //Constructor de la clase Película
     public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, long ingreso) {
@@ -22,6 +23,7 @@ public class Pelicula implements Comparable<Pelicula>{
         this.genero = genero;
         this.directores = new ArrayList<>(5);
         this.ingreso = ingreso;
+        this.numRating = 0;
     }
 
     //Getter del id de la película
@@ -90,6 +92,14 @@ public class Pelicula implements Comparable<Pelicula>{
     //Setter del director de la película
     public void setIngreso(long ingreso) {
         this.ingreso = ingreso;
+    }
+
+    public int getNumRating() {
+        return numRating;
+    }
+
+    public void addNumRating() {
+        this.numRating++;
     }
 
     @Override

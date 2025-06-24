@@ -1,8 +1,11 @@
 package entities;
 
 import entities.cargaDatos.CargaDatos;
+import tads.hashTable.HashEntry;
 import tads.hashTable.OpenHashTable;
 import tads.list.ArrayList;
+import tads.list.linked.LinkedList;
+import tads.tree.heap.HeapArray;
 
 
 public class UMovieImpl implements UMovie{
@@ -32,7 +35,13 @@ public class UMovieImpl implements UMovie{
         this.directores = dr.getDirectores();
     }
 
-    public void topPeliculasMasCalificacionesPorIdioma(){
+    public void topPeliculasMasCalificacionesPorIdioma() {
+        String[] idiomas = {"en", "es", "fr", "pt", "it"};
+        String[] nombresIdiomas = {"inglés", "español", "francés", "portugués", "italiano"};
+
+        for (int i = 0; i < idiomas.length; i++) {
+            mostrarTop5Idioma(idiomas[i], nombresIdiomas[i]);
+        }
 
         /*
         Top 5 de las películas que más calificaciones por idioma.
@@ -41,6 +50,35 @@ public class UMovieImpl implements UMovie{
         <id_pelicula>, <titulo_pelicula>,<total_calificaciones>,<idioma>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
+
+    }
+
+    private void mostrarTop5Idioma(String idioma, String nombreIdioma) {
+        HeapArray<WrapperPelicula> peliculasIdioma = buscarPeliculasPorIdioma(idioma);
+
+        if (peliculasIdioma == null || peliculasIdioma.isEmpty()) {
+            System.out.println("No hay películas en " + nombreIdioma);
+            System.out.println();
+            return;
+        }
+
+        System.out.println("Top 5 películas en " + nombreIdioma + ":");
+
+        // Extraer hasta 5 películas (las de mayor rating)
+        for (int i = 1; i <= 5; i++) {
+            try {
+                Integer idPelicula = peliculasIdioma.pop().getIdPelicula();
+                Pelicula pelicula = peliculas.get(idPelicula);
+
+                if (pelicula != null) {
+                    System.out.println("<" + i + ">, <" + pelicula.getNombre() + ">, <" + pelicula.getNumRating() + ">, <" + nombreIdioma + ">");
+                }
+            } catch (Exception e) {
+                // No hay más películas en la cola
+                break;
+            }
+        }
+        System.out.println();
     }
 
     public void topPeliculasMejorCalificacionMedia(){
@@ -97,6 +135,34 @@ public class UMovieImpl implements UMovie{
         <id_usuario>,<genero>,<cantidad de califaciones sobre ese género>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
+    }
+
+    public HeapArray<WrapperPelicula> buscarPeliculasPorIdioma(String idioma){
+
+        HeapArray<WrapperPelicula> peliculasIdioma = new HeapArray<>(false) {
+        };
+
+        if (idioma == null || idioma.isBlank()){
+            return peliculasIdioma;
+        }
+
+
+        for (int i = 0; i < peliculas.capacity(); i++) {
+            LinkedList<HashEntry<Integer,Pelicula>> bucket = peliculas.getTable()[i];
+            Pelicula p;
+            if (bucket != null) {                                   // Si el bucket es nulo se pasa al siguiente bucket
+                for (HashEntry<Integer,Pelicula> entry : bucket) {
+                    p = entry.getValue();
+                    if (p.getIdiomaOriginal().equals(idioma)) {
+                        WrapperPelicula pelicula = new WrapperPelicula(p.getIdPelicula(), p.getNumRating());
+                        peliculasIdioma.add(pelicula);
+                    }
+                }
+            }
+
+        }
+
+        return peliculasIdioma;
     }
 
 

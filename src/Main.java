@@ -32,7 +32,7 @@ public class Main {
 //                    System.out.println(runtime.totalMemory()/1048576);
                     break;
                 case "2":
-                    menuConsultas(sc);
+                    menuConsultas(sc, um);
                     break;
                 case "3":
                     break;
@@ -45,7 +45,7 @@ public class Main {
 
     }
 
-    static void menuConsultas(Scanner sc){
+    static void menuConsultas(Scanner sc, UMovieImpl um){
         String op;
         do {
             System.out.println("1. Top 5 de las películas que más calificaciones por idioma.");
@@ -59,7 +59,13 @@ public class Main {
 
             switch (op){
                 case "1":
-                    //call a la f1
+
+                    long startTime = System.currentTimeMillis();
+                    um.topPeliculasMasCalificacionesPorIdioma();
+                    long finalTime = System.currentTimeMillis();
+                    long timeElapsed = finalTime - startTime;
+                    System.out.println("Carga de datos exitosa, tiempo de ejecución de la carga: "+timeElapsed+"ms");
+                    System.out.println();
                     break;
                 case "2":
                     //call a la f2
