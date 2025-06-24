@@ -30,18 +30,18 @@ public class CargaDatos {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 
-    public static void cargaDatos() {
+    public static DataResult cargaDatos() {
         cargaPelis();
         cargaReviews();
         cargaCreditos();
-//        DataResult res = new DataResult();
-//        res.setPeliculas(peliculas);
-//        res.setColecciones(colecciones);
-//        res.setUsuarios(usuarios);
-//        res.setCalificaciones(calificaciones);
-//        res.setDirectores(directores);
-//        res.setActores(actores);
-//        return res;
+        DataResult res = new DataResult();
+        res.setPeliculas(peliculas);
+        res.setColecciones(colecciones);
+        res.setUsuarios(usuarios);
+        res.setCalificaciones(calificaciones);
+        res.setDirectores(directores);
+        res.setActores(actores);
+        return res;
     }
 
     private static void cargaPelis(){

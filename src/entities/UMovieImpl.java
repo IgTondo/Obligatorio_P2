@@ -22,16 +22,14 @@ public class UMovieImpl implements UMovie{
         this.calificaciones = new ArrayList<>();
     }
 
-    @SuppressWarnings("unchecked")
     public void cargaDatos(){
-        CargaDatos.cargaDatos();
-//        DataResult dr = CargaDatos.cargaDatos();
-//        this.peliculas = dr.getPeliculas();
-//        this.colecciones = dr.getColecciones();
-//        this.usuarios = dr.getUsuarios();
-//        this.calificaciones = dr.getCalificaciones();
-//        this.actores = dr.getActores();
-//        this.directores = dr.getDirectores();
+        DataResult dr = CargaDatos.cargaDatos();
+        this.peliculas = dr.getPeliculas();
+        this.colecciones = dr.getColecciones();
+        this.usuarios = dr.getUsuarios();
+        this.calificaciones = dr.getCalificaciones();
+        this.actores = dr.getActores();
+        this.directores = dr.getDirectores();
     }
 
     public void topPeliculasMasCalificacionesPorIdioma(){
