@@ -10,16 +10,17 @@ public class Pelicula implements Comparable<Pelicula>{
     private LocalDate fechaDeEstreno;
     private String idiomaOriginal;
     private ArrayList<String> genero;
-    private String director;
+    private ArrayList<Integer> directores;
     private long ingreso;
 
     //Constructor de la clase Película
-    public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, String director, long ingreso) {
+    public Pelicula(int idPelicula, String nombre, LocalDate fechaDeEstreno, String idiomaOriginal, ArrayList<String> genero, long ingreso) {
         this.idPelicula = idPelicula;
+        this.nombre = nombre;
         this.fechaDeEstreno = fechaDeEstreno;
         this.idiomaOriginal = idiomaOriginal;
         this.genero = genero;
-        this.director = director;
+        this.directores = new ArrayList<>(5);
         this.ingreso = ingreso;
     }
 
@@ -72,13 +73,13 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     //Getter del director de la película
-    public String getDirector() {
-        return director;
+    public ArrayList<Integer> getDirectores() {
+        return directores;
     }
 
     //Setter del director de la película
-    public void setDirector(String director) {
-        this.director = director;
+    public void addDirector(int director) {
+        this.directores.add(director);
     }
 
     //Getter del ingreso de la película
@@ -87,7 +88,7 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
     //Setter del director de la película
-    public void setIngreso(int ingreso) {
+    public void setIngreso(long ingreso) {
         this.ingreso = ingreso;
     }
 
@@ -104,9 +105,8 @@ public class Pelicula implements Comparable<Pelicula>{
                 ", fechaDeEstreno=" + fechaDeEstreno +
                 ", idiomaOriginal='" + idiomaOriginal + '\'' +
                 ", genero=" + genero +
-                ", director='" + director + '\'' +
+                ", director='" + directores + '\'' +
                 ", ingreso=" + ingreso +
                 '}';
     }
 }
-
