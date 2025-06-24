@@ -3,7 +3,7 @@ package tads.list;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
+public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T> {
     private T[] data;
     private int length;
     private static final int INITIAL_CAPACITY = 10;
@@ -18,14 +18,12 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
         length = 0;
     }
 
-    // Adds to the end
     @Override
     public void add(T value) {
         ensureCapacity();
         data[length++] = value;
     }
 
-    // Adds at a specific index
     @Override
     public void add(T value, int index) {
         if (index < 0 || index > length)
@@ -39,19 +37,16 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
         length++;
     }
 
-    // Gets the element at index
     public T get(int index) {
         checkIndex(index);
         return data[index];
     }
 
-    // Sets value at index
     public void set(int index, T value) {
         checkIndex(index);
         data[index] = value;
     }
 
-    // Removes the element at index
     public T remove(int index) {
         checkIndex(index);
         T removed = data[index];
@@ -62,13 +57,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
         return removed;
     }
 
-    // Returns current length
     @Override
     public int length() {
         return length;
     }
 
-    // Checks if list is empty
     public boolean isEmpty() {
         return length == 0;
     }
@@ -92,8 +85,6 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
         add(value);
     }
 
-
-    // Internal capacity increase
     private void ensureCapacity() {
         if (length == data.length) {
             int newCapacity = data.length * 2;
@@ -101,13 +92,11 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
         }
     }
 
-    // Validates index
     private void checkIndex(int index) {
         if (index < 0 || index >= length)
             throw new IndexOutOfBoundsException("Index: " + index);
     }
 
-    // String representation
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
@@ -123,5 +112,38 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T>{
     public Iterator<T> iterator() {
         return new ArrayListIterator<>(this.data, this.length);
     }
-}
 
+
+    public void sort() {
+        quickSort(0, length - 1);
+    }
+
+    private void quickSort(int low, int high) {
+        if (low < high) {
+            int pivotIndex = partition(low, high);
+            quickSort(low, pivotIndex - 1);
+            quickSort(pivotIndex + 1, high);
+        }
+    }
+
+    private int partition(int low, int high) {
+        T pivot = data[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (data[j].compareTo(pivot) <= 0) {
+                i++;
+                swap(i, j);
+            }
+        }
+
+        swap(i + 1, high);
+        return i + 1;
+    }
+
+    private void swap(int i, int j) {
+        T temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+}

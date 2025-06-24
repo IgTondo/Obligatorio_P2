@@ -1,15 +1,14 @@
 package tads.hashTable;
 
 import tads.exceptions.ElementAlreadyExistsException;
+import tads.list.ArrayList;
 import tads.list.linked.LinkedList;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V>
- {
-    private static final int DEFAULT_CAPACITY = 16;
-
+public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V> {
+    private static final int DEFAULT_CAPACITY = 16; // Power of 2 is good for hashing
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private LinkedList<HashEntry<K, V>>[] table;
     private int size;
@@ -157,6 +156,22 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
 
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    public ArrayList<V> getValues() {
+        ArrayList<V> listToReturn = new ArrayList<>(this.size);
+
+        LinkedList<HashEntry<K,V>> listForPosition = null;
+        for (LinkedList<HashEntry<K, V>> hashEntries : table) {
+            if (hashEntries != null) {
+                listForPosition = hashEntries;
+                for (HashEntry<K, V> hs : listForPosition) {
+                    listToReturn.add(hs.value);
+                }
+            }
+        }
+
+        return listToReturn;
     }
 
     @SuppressWarnings("unchecked")

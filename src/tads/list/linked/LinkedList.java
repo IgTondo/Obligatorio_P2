@@ -70,19 +70,36 @@ public class LinkedList<T extends Comparable<T>> implements List<T>, Iterable<T>
         return oldHead.getValue();
     }
 
-    public void remove(Node<T> n){
-        if (!this.contains(n.getValue())){
-            throw new RuntimeException("El nodo no se encuentra en la lista.");
-        }
-        Node<T> temp = this.head;
-        for (int i = 0; i < this.length; i++) {
-            if (temp.equals(n)){
-                this.remove(i);
-                return;
-            }
-            temp = temp.getNext();
+    public void remove(Node<T> nodeToRemove) {
+        if (nodeToRemove == null || this.head == null) {
+            return;
         }
 
+        if (this.head == nodeToRemove) {
+            removeFirst();
+            return;
+        }
+
+        Node<T> prev = this.head;
+        Node<T> current = this.head.getNext();
+
+        while (current != null) {
+            if (current == nodeToRemove) {
+                prev.setNext(current.getNext());
+
+                if (current == this.tail) {
+                    this.tail = prev;
+                }
+
+                current.setNext(null);
+                this.length--;
+                return;
+            }
+            prev = current;
+            current = current.getNext();
+        }
+
+        throw new RuntimeException("Nodo no encontrado en la lista.");
     }
 
     public Node<T> removeFirst(){
