@@ -21,10 +21,11 @@ public class UMovieImpl implements UMovie{
 
     @SuppressWarnings("unchecked")
     public void cargaDatos(){
-        OpenHashTable[] temp = CargaDatos.cargaDatos();
+        OpenHashTable[] temp = (OpenHashTable[]) CargaDatos.cargaDatos(); // Cast explícito
         this.peliculas = temp[0];
         this.colecciones = temp[1];
     }
+
 
     public void topPeliculasMasCalificacionesPorIdioma(){
 
