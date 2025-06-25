@@ -3,8 +3,8 @@ package tads.hashTable;
 import java.util.Objects;
 
 public class HashEntry<K, V> implements Comparable<HashEntry<K, V>>{
-    K key;
-    V value;
+    protected K key;
+    protected V value;
 
     public HashEntry(K key, V value) {
         this.key = key;
@@ -28,6 +28,22 @@ public class HashEntry<K, V> implements Comparable<HashEntry<K, V>>{
     @Override
     public int compareTo(HashEntry hashEntry) {
         return 0;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public V getValue() {
+        return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
     }
 
     @Override

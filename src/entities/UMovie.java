@@ -5,6 +5,6 @@ public interface UMovie {
     public void topPeliculasMejorCalificacionMedia();
     public void topColeccionesMasIngresos();
     public void topDirectoresMejorCalificaciones();
-    public void ActorMasCalificacionesPorMes();
+    public void actorMasCalificacionesPorMes();
     public void usuariosMasCalificacionesPorGenero();
 }

@@ -7,7 +7,7 @@ import tads.list.linked.LinkedList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V> {
+public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V>, Comparable<OpenHashTable<K, V>> {
     private static final int DEFAULT_CAPACITY = 16; // Power of 2 is good for hashing
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private LinkedList<HashEntry<K, V>>[] table;
@@ -207,11 +207,20 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
         return resultados;
     }
 
+    public LinkedList<HashEntry<K, V>>[] getTable(){
+        return table;
+    }
+
 
     @Override
     public String toString() {
         return "OpenHashTable{" +
                 "table=" + Arrays.toString(table) +
                 '}';
+    }
+
+    @Override
+    public int compareTo(OpenHashTable<K, V> kvOpenHashTable) {
+        return 0;
     }
 }

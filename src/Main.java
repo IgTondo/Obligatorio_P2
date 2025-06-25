@@ -6,7 +6,7 @@ public class Main {
         UMovieImpl um = new UMovieImpl();
         Scanner sc = new Scanner(System.in);
         String op;
-//        Runtime runtime = Runtime.getRuntime();
+        Runtime runtime = Runtime.getRuntime();
         do{
             System.out.println("Menú principal: ");
             System.out.println("\tSeleccione la opción que desee: ");
@@ -61,7 +61,11 @@ public class Main {
 
             switch (op){
                 case "1":
-
+                    startTime = System.currentTimeMillis();
+                    um.topPeliculasMasCalificacionesPorIdioma();
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = finalTime - startTime;
+                    System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "2":
                     System.out.println("Ejecutando consulta");
@@ -75,17 +79,29 @@ public class Main {
                     startTime = System.currentTimeMillis();
                     um.topColeccionesMasIngresos();
                     finalTime = System.currentTimeMillis();
-                    timeElapsed = startTime - finalTime;
+                    timeElapsed = finalTime - startTime;
                     System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "4":
-                    //call a la f4
+                    startTime = System.currentTimeMillis();
+                    um.topDirectoresMejorCalificaciones();
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = finalTime - startTime;
+                    System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "5":
-                    //call a la f5
+                    startTime = System.currentTimeMillis();
+                    um.actorMasCalificacionesPorMes();
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = finalTime - startTime;
+                    System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "6":
-                    //call a la f6
+                    startTime = System.currentTimeMillis();
+                    um.usuariosMasCalificacionesPorGenero();
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = finalTime - startTime;
+                    System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "7":
                     break;

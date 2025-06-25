@@ -18,11 +18,11 @@ import java.time.format.DateTimeFormatter;
 
 public class CargaDatos {
 
-    private static final OpenHashTable<Integer, Pelicula> peliculas = new OpenHashTable<>(45587);
-    private static final OpenHashTable<Integer, Coleccion> colecciones = new OpenHashTable<>(45587);
+    private static final OpenHashTable<Integer, Pelicula> peliculas = new OpenHashTable<>(600000);
+    private static final OpenHashTable<Integer, Coleccion> colecciones = new OpenHashTable<>(60000);
     private static final OpenHashTable<Integer, Usuario> usuarios = new OpenHashTable<>(170000);
     private static final OpenHashTable<Integer, Director> directores = new OpenHashTable<>(32768);
-    private static final OpenHashTable<Integer, Actor> actores = new OpenHashTable<>(250000);
+    private static final OpenHashTable<Integer, Actor> actores = new OpenHashTable<>(300000);
     private static final ArrayList<Calificacion> calificaciones = new ArrayList<>(5000000);
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -63,7 +63,10 @@ public class CargaDatos {
                         System.err.println(e.getMessage());
                     }
 
-                    String nombre = nextLine[18];
+                    String nombre = nextLine[8];
+                    if (nombre.isEmpty()){
+                        continue;
+                    }
                     LocalDate fechaEstreno = null;
                     if (!nextLine[12].isEmpty()){
                         fechaEstreno = LocalDate.parse(nextLine[12], DATE_FORMATTER);

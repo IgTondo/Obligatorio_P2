@@ -119,15 +119,16 @@ public class ArrayList<T extends Comparable<T>> implements List<T>, Iterable<T> 
     }
 
     private void quickSort(int low, int high) {
-        if (low < high) {
-            int pivotIndex = partition(low, high);
-            quickSort(low, pivotIndex - 1);
-            quickSort(pivotIndex + 1, high);
-        }
+        if (low >= high) return;
+        int pivotIndex = partition(low, high);
+        quickSort(low, pivotIndex - 1);
+        quickSort(pivotIndex + 1, high);
     }
 
     private int partition(int low, int high) {
-        T pivot = data[high];
+        int mid = low + (high - low) / 2;
+        T pivot = data[mid];
+        swap(mid, high);
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
