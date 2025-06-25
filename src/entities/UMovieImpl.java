@@ -17,6 +17,7 @@ public class UMovieImpl implements UMovie{
     public OpenHashTable<Integer, Director> directores;
     public ArrayList<Calificacion> calificaciones;
 
+
     public UMovieImpl(){
         this.peliculas = new OpenHashTable<>(16);
         this.actores = new OpenHashTable<>(16);
@@ -24,6 +25,7 @@ public class UMovieImpl implements UMovie{
         this.colecciones = new OpenHashTable<>(16);
         this.directores = new OpenHashTable<>(16);
         this.calificaciones = new ArrayList<>(16);
+
     }
 
     public void cargaDatos(){
@@ -173,41 +175,58 @@ public class UMovieImpl implements UMovie{
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
     }
 
-    public void topDirectoresMejorCalificaciones(){
+    public void topDirectoresMejorCalificaciones() {
+    /*
+    Top 10 de los directores que mejor calificación tienen.
+    Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
 
-        /*
-        Top 10 de los directores que mejor calificación tienen.
-        Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
+    <nombre_director>,<cantidad_peliculas>,<mediana_calificacion>
+    Tiempo de ejecución de la consulta: <tiempo_ejecucion>
+    */
 
-        <nombre_director>,<cantidad_peliculas>,<mediana_calificacion>
-        Tiempo de ejecución de la consulta: <tiempo_ejecucion>
-        */
         long inicio = System.currentTimeMillis();
 
-        ArrayList<DirectorEstadistica> estadisticas = new ArrayList<>();
 
+        OpenHashTable<Integer, ListaDeFloats> calificacionesPorPelicula = new OpenHashTable<>(peliculas.size());
+
+        for (int i = 0; i < calificaciones.length(); i++) {
+            Calificacion c = calificaciones.get(i);
+            int idPeli = c.getIdPelicula();
+
+            ListaDeFloats lista = calificacionesPorPelicula.get(idPeli);
+            if (lista == null) {
+                lista = new ListaDeFloats();
+                calificacionesPorPelicula.put(idPeli, lista);
+            }
+
+            lista.add(c.getPuntaje());
+        }
+
+
+        ArrayList<DirectorEstadistica> estadisticas = new ArrayList<>();
         ArrayList<Director> todos = directores.getValues();
 
         for (int i = 0; i < todos.length(); i++) {
             Director d = todos.get(i);
             ArrayList<Integer> pelis = d.getPeliculasDirigidas();
 
+            if (pelis.length() <= 1) continue;
+
             ArrayList<Float> califs = new ArrayList<>();
 
             for (int j = 0; j < pelis.length(); j++) {
                 int idPeli = pelis.get(j);
-                Pelicula p = peliculas.get(idPeli);
-                if (p == null) continue;
+                ListaDeFloats lista = calificacionesPorPelicula.get(idPeli);
 
-                for (int k = 0; k < calificaciones.length(); k++) {
-                    Calificacion c = calificaciones.get(k);
-                    if (c.getIdPelicula() == idPeli) {
-                        califs.add(c.getPuntaje());
+                if (lista != null) {
+                    ArrayList<Float> valores = lista.getValores();
+                    for (int k = 0; k < valores.length(); k++) {
+                        califs.add(valores.get(k));
                     }
                 }
             }
 
-            if (califs.length() > 0) {
+            if (califs.length() > 100) {
                 califs.sort();
                 float mediana;
                 int mid = califs.length() / 2;
@@ -221,19 +240,19 @@ public class UMovieImpl implements UMovie{
             }
         }
 
-        estadisticas.sort(); // Ordena por mediana descendente
+
+        estadisticas.sort();
 
         for (int i = 0; i < 10 && i < estadisticas.length(); i++) {
-
             DirectorEstadistica d = estadisticas.get(i);
-            System.out.println(d.getNombre());
             System.out.println(d.getNombre() + "," + d.getCantPeliculas() + "," + d.getMediana());
         }
 
         long fin = System.currentTimeMillis();
         System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
     }
-    //cambie compareTo en coleccion, agegue la clase auxiliar, y esta funcion, no se si directores se esta cargando completamente
+
+            //cambie compareTo en coleccion, agegue la clase auxiliar, y esta funcion, no se si directores se esta cargando completamente
 
     public void ActorMasCalificacionesPorMes(){
 
@@ -244,6 +263,8 @@ public class UMovieImpl implements UMovie{
          <mes>,<nombre_actor>,<cantidad_peliculas>,<cantidad de calificaciones>
          Tiempo de ejecución de la consulta: <tiempo_ejecucion>
          */
+
+
     }
 
     public void usuariosMasCalificacionesPorGenero(){
