@@ -47,14 +47,11 @@ public class CargaDatos {
     private static void cargaPelis(){
         String csvFilePath = "src/data/movies_metadata.csv";
         int processedLines = 0;
-        long startTime = System.currentTimeMillis();
         try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(csvFilePath)))) {
             String[] nextLine;
             reader.skip(1);
             while ((nextLine = reader.readNext()) != null) {
                 processedLines++;
-                // Process the line
-                //Verifica si la linea tiene el formato correcto, por ahora si no lo tienen paso a la próxima
                 if (!nextLine[0].equals("FALSE") && !nextLine[0].equals("TRUE")) {
                     continue;
                 }
@@ -67,8 +64,10 @@ public class CargaDatos {
                     }
 
                     String nombre = nextLine[18];
-                    if (nextLine[12].isEmpty()){continue;}
-                    LocalDate fechaEstreno = LocalDate.parse(nextLine[12], DATE_FORMATTER);
+                    LocalDate fechaEstreno = null;
+                    if (!nextLine[12].isEmpty()){
+                        fechaEstreno = LocalDate.parse(nextLine[12], DATE_FORMATTER);
+                    }
                     String idiomaOriginal = nextLine[7];
                     ArrayList<String> generos = new ArrayList<>();
                     String genreJsonString = nextLine[3];
@@ -91,7 +90,6 @@ public class CargaDatos {
                     try {
                         ingreso = Long.parseLong(nextLine[13]);
                     }catch (Exception ignored){
-                        continue;
                     }
 
                     Pelicula p = new Pelicula(id, nombre, fechaEstreno, idiomaOriginal, generos, ingreso);
@@ -101,7 +99,7 @@ public class CargaDatos {
                         continue;
                     }
 
-                    String collectionJsonString = nextLine[1]; // Get collection string
+                    String collectionJsonString = nextLine[1];
                     if (collectionJsonString != null && !collectionJsonString.isEmpty()) {
                         String validCollectionJson = repairPythonDictLikeString(collectionJsonString);
                         try {
@@ -128,9 +126,12 @@ public class CargaDatos {
                     }else {
                         Coleccion c = new Coleccion(id, nombre);
                         colecciones.put(id, c);
+                        c.addPeliculaToCollection(id);
                     }
 
 
+                }else {
+                    System.out.println("Linea con mal formato: " + processedLines);
                 }
 
             }
@@ -206,6 +207,7 @@ public class CargaDatos {
                     int movieId = Integer.parseInt(line[2]);
                     Pelicula movie = peliculas.get(movieId);
                     if (movie == null){
+                        System.out.println(movieId);
                         continue;
                     }
 
@@ -287,13 +289,25 @@ public class CargaDatos {
             int nameKey = castField.indexOf("'name':", idEnd);
             if (nameKey == -1) break;
 
-            int nameStart = castField.indexOf("'", nameKey + 7) + 1;
+            // Detectar delimitador: puede ser ' o "
+            int delimIndex = nameKey + 7;
+            while (delimIndex < length && Character.isWhitespace(castField.charAt(delimIndex))) {
+                delimIndex++;
+            }
+
+            if (delimIndex >= length) break;
+
+            char quoteChar = castField.charAt(delimIndex); // ' o "
+            if (quoteChar != '\'' && quoteChar != '"') break;
+
+            int nameStart = delimIndex + 1;
             int nameEnd = nameStart;
             boolean escape = false;
-            while (nameEnd < castField.length()) {
+
+            while (nameEnd < length) {
                 char c = castField.charAt(nameEnd);
-                if (c == '\'' && !escape) break;
-                escape = (c == '\\');
+                if (c == quoteChar && !escape) break;
+                escape = (c == '\\') && !escape;
                 nameEnd++;
             }
 

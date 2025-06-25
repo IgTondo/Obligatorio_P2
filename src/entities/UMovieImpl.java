@@ -1,12 +1,8 @@
 package entities;
 
 import entities.cargaDatos.CargaDatos;
-import org.apache.commons.lang3.tuple.Pair;
 import tads.hashTable.OpenHashTable;
 import tads.list.ArrayList;
-import tads.list.ArrayList;
-
-import java.util.Map;
 
 
 public class UMovieImpl implements UMovie{
@@ -34,9 +30,8 @@ public class UMovieImpl implements UMovie{
         this.calificaciones = dr.getCalificaciones();
         this.actores = dr.getActores();
         this.directores = dr.getDirectores();
-        OpenHashTable[] temp = (OpenHashTable[]) CargaDatos.cargaDatos(); // Cast explícito
-        this.peliculas = temp[0];
-        this.colecciones = temp[1];
+        System.out.println(directores.size());
+        System.out.println(actores.get(13295));
     }
 
 
@@ -83,11 +78,10 @@ public class UMovieImpl implements UMovie{
         }
 
         // Crear lista auxiliar con promedio
-        ArrayList<PeliculaPromedio> candidatas = new ArrayList<>();
+        ArrayList<Pelicula> candidatas = new ArrayList<>();
 
         ArrayList<Pelicula> todasLasPeliculas = peliculas.getValues();
-        for (int i = 0; i < todasLasPeliculas.length(); i++) {
-            Pelicula pelicula = todasLasPeliculas.get(i);
+        for (Pelicula pelicula : todasLasPeliculas) {
             int id = pelicula.getIdPelicula();
 
             if (conteoCalificaciones.contains(id)) {
@@ -95,24 +89,17 @@ public class UMovieImpl implements UMovie{
                 if (total > 100) {
                     float suma = sumaPuntajes.get(id);
                     float promedio = suma / total;
-                    candidatas.add(new PeliculaPromedio(pelicula, promedio));
+                    pelicula.setPromedioCalificaciones(promedio);
+                    candidatas.add(pelicula);
                 }
             }
         }
 
         candidatas.sort();
 
-        // Seleccionar top 10
-        ArrayList<Pelicula> top10 = new ArrayList<>();
-        int cantidad = Math.min(10, candidatas.length());
-        for (int i = 0; i < cantidad; i++) {
-            top10.add(candidatas.get(i).pelicula);
-        }
-
         for (int i = 0; i < 10; i++) {
-            PeliculaPromedio pp = candidatas.get(i);
-            Pelicula p = pp.pelicula;
-            float promedio = pp.promedio;
+            Pelicula p = candidatas.get(i);
+            float promedio = p.getPromedioCalificaciones();
             System.out.println(p.getIdPelicula()+", "+p.getNombre()+", "+promedio);
         }
     }
@@ -127,47 +114,32 @@ public class UMovieImpl implements UMovie{
         <titulo_coleccion>,<cantidad_peliculas>,[id_pelicula_1,id_pelicula_2]<ingreso_generado>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
-        long inicio = System.currentTimeMillis();
-
-        ArrayList<Coleccion> lista = new ArrayList<>();
-
         // Obtener todas las colecciones
-        ArrayList<Coleccion> todas = colecciones.values();
+        ArrayList<Coleccion> collections = colecciones.getValues();
 
         // Calcular ingreso total por colección
-        for (int i = 0; i < todas.length(); i++) {
-            Coleccion c = todas.get(i);
+        for (Coleccion c : collections) {
             long ingresoTotal = 0;
 
             ArrayList<Integer> idsPelis = c.getIdsPeliculas();
-            for (int j = 0; j < idsPelis.length(); j++) {
-                Pelicula p = peliculas.get(idsPelis.get(j));
+            for (int id : idsPelis) {
+                Pelicula p = peliculas.get(id);
                 if (p != null) {
                     ingresoTotal += p.getIngreso();
                 }
             }
 
             c.setIngresoTotal(ingresoTotal);
-            lista.add(c);
         }
 
-        // Ordenar lista por ingresoTotal (burbuja descendente)
-        for (int i = 0; i < lista.length(); i++) {
-            for (int j = i + 1; j < lista.length(); j++) {
-                if (lista.get(j).getIngresoTotal() > lista.get(i).getIngresoTotal()) {
-                    Coleccion temp = lista.get(i);
-                    lista.set(i, lista.get(j));
-                    lista.set(j, temp);
-                }
-            }
-        }
+        collections.sort();
 
         // Mostrar top 5
-        for (int i = 0; i < 5 && i < lista.length(); i++) {
-            Coleccion c = lista.get(i);
+        for (int i = 0; i < 5 && i < collections.length(); i++) {
+            Coleccion c = collections.get(i);
             ArrayList<Integer> ids = c.getIdsPeliculas();
 
-            System.out.print(c.getId() + ",");
+            System.out.println(c.getId() + ",");
             System.out.print(c.getNombre() + ",");
             System.out.print(ids.length() + ",[");
             for (int j = 0; j < ids.length(); j++) {
@@ -176,9 +148,6 @@ public class UMovieImpl implements UMovie{
             }
             System.out.println("]," + c.getIngresoTotal());
         }
-
-        long fin = System.currentTimeMillis();
-        System.out.println("Tiempo de ejecución de la consulta: " + (fin - inicio) + " ms");
     }
 
     public void topDirectoresMejorCalificaciones(){

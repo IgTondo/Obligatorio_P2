@@ -46,6 +46,9 @@ public class Main {
 
     static void menuConsultas(Scanner sc, UMovieImpl um){
         String op;
+        long startTime;
+        long finalTime;
+        long timeElapsed;
         do {
             System.out.println("1. Top 5 de las películas que más calificaciones por idioma.");
             System.out.println("2. Top 10 de las películas que mejor calificación media tienen por parte de los usuarios.");
@@ -62,14 +65,18 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("Ejecutando consulta");
-                    long startTime = System.currentTimeMillis();
+                    startTime = System.currentTimeMillis();
                     um.topPeliculasMejorCalificacionMedia();
-                    long finalTime = System.currentTimeMillis();
-                    long timeElapsed = finalTime - startTime;
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = finalTime - startTime;
                     System.out.println("Tiempo de ejecución de la consulta: "+timeElapsed+"ms\n");
                     break;
                 case "3":
-                    um.topColeccionesMasIngresos();  // ✅ llamada al método real
+                    startTime = System.currentTimeMillis();
+                    um.topColeccionesMasIngresos();
+                    finalTime = System.currentTimeMillis();
+                    timeElapsed = startTime - finalTime;
+                    System.out.println("Tiempo de ejecución de la consulta: " + timeElapsed + "ms");
                     break;
                 case "4":
                     //call a la f4

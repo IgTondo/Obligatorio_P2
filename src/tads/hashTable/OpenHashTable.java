@@ -15,7 +15,9 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
     private int capacity;
     private final float loadFactor;
 
-
+    public OpenHashTable() {
+        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+    }
 
     public OpenHashTable(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
@@ -193,7 +195,7 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
     }
     @SuppressWarnings("unchecked")
     public V[] getAllValues() {
-        V[] resultados = (V[]) new Object[this.size()]; // ✅ CAMBIO CLAVE: Object en lugar de Comparable
+        V[] resultados = (V[]) new Object[this.size()];
         int idx = 0;
 
         for (int i = 0; i < table.length; i++) {
@@ -204,24 +206,6 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
 
         return resultados;
     }
-
-    public tads.list.ArrayList<V> values() {
-        tads.list.ArrayList<V> lista = new tads.list.ArrayList<>();
-
-        for (int i = 0; i < table.length; i++) {
-            for (HashEntry<K, V> entry : table[i]) {
-                lista.add(entry.value);
-            }
-        }
-
-        return lista;
-    }
-
-
-
-
-
-
 
 
     @Override

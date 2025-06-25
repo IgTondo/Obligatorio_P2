@@ -6,18 +6,20 @@ public class Coleccion implements Comparable<Coleccion>{
     private int id;
     private String nombre;
     private ArrayList<Integer> idsPeliculas;
+    private long ingresoTotal;
 
     //Constructor de la clase Colección
     public Coleccion(int id, String nombre, ArrayList<Integer> idsPeliculas) {
         this.id = id;
         this.nombre = nombre;
         this.idsPeliculas = idsPeliculas;
+        this.ingresoTotal = 0;
     }
 
     public Coleccion(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.idsPeliculas = new ArrayList<>(100);
+        this.idsPeliculas = new ArrayList<>(10);
     }
 
     //Getter del id de la colección
@@ -56,18 +58,8 @@ public class Coleccion implements Comparable<Coleccion>{
 
     @Override
     public int compareTo(Coleccion coleccion) {
-        return 0;
+        return Long.compare(coleccion.ingresoTotal ,this.ingresoTotal);
     }
-
-    @Override
-    public String toString() {
-        return "Coleccion{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", idsPeliculas=" + idsPeliculas +
-                '}';
-    }
-    private long ingresoTotal = 0;
 
     public long getIngresoTotal() {
         return ingresoTotal;
@@ -75,6 +67,16 @@ public class Coleccion implements Comparable<Coleccion>{
 
     public void setIngresoTotal(long ingresoTotal) {
         this.ingresoTotal = ingresoTotal;
+    }
+
+    @Override
+    public String toString() {
+        return "Coleccion{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", ingresoTotal=" + ingresoTotal +
+                ", idsPeliculas=" + idsPeliculas +
+                '}';
     }
 
 }

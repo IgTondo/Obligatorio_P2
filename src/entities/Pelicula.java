@@ -23,6 +23,7 @@ public class Pelicula implements Comparable<Pelicula>{
         this.genero = genero;
         this.directores = new ArrayList<>(5);
         this.ingreso = ingreso;
+        this.promedioCalificaciones = 0;
     }
 
     //Getter del id de la película
@@ -94,10 +95,17 @@ public class Pelicula implements Comparable<Pelicula>{
     }
 
 
+    public float getPromedioCalificaciones() {
+        return promedioCalificaciones;
+    }
+
+    public void setPromedioCalificaciones(float promedioCalificaciones) {
+        this.promedioCalificaciones = promedioCalificaciones;
+    }
 
     @Override
     public int compareTo(Pelicula pelicula) {
-        return 0;
+        return Float.compare(pelicula.promedioCalificaciones, this.promedioCalificaciones);
     }
 
     @Override
