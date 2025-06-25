@@ -222,9 +222,8 @@ public class CargaDatos {
                                 Actor existing = actores.get(actor.getId());
                                 if (existing == null) {
                                     actores.put(actor.getId(), actor);
-                                    existing = actor;
                                 }
-                                existing.addPelicula(movieId);
+                                movie.addActor(actor.getId());
                             }
                         }catch (Exception parseE){
                             System.err.println("Parsing error for actor on line " + processedLines + ": " + parseE.getMessage());

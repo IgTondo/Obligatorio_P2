@@ -11,6 +11,7 @@ public class Pelicula implements Comparable<Pelicula>{
     private String idiomaOriginal;
     private ArrayList<String> genero;
     private ArrayList<Integer> directores;
+    private ArrayList<Integer> actores;
     private long ingreso;
     private float promedioCalificaciones;
 
@@ -22,6 +23,7 @@ public class Pelicula implements Comparable<Pelicula>{
         this.idiomaOriginal = idiomaOriginal;
         this.genero = genero;
         this.directores = new ArrayList<>(5);
+        this.actores = new ArrayList<>(20);
         this.ingreso = ingreso;
         this.promedioCalificaciones = 0;
     }
@@ -84,6 +86,22 @@ public class Pelicula implements Comparable<Pelicula>{
         this.directores.add(director);
     }
 
+    public void setDirectores(ArrayList<Integer> directores) {
+        this.directores = directores;
+    }
+
+    public ArrayList<Integer> getActores() {
+        return actores;
+    }
+
+    public void setActores(ArrayList<Integer> actores) {
+        this.actores = actores;
+    }
+
+    public void addActor(int actorId){
+        this.actores.add(actorId);
+    }
+
     //Getter del ingreso de la película
     public long getIngreso() {
         return ingreso;
@@ -117,6 +135,7 @@ public class Pelicula implements Comparable<Pelicula>{
                 ", idiomaOriginal='" + idiomaOriginal + '\'' +
                 ", genero=" + genero +
                 ", director='" + directores + '\'' +
+                ", actores='" + actores + '\'' +
                 ", ingreso=" + ingreso +
                 '}';
     }
