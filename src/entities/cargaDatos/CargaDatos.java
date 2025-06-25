@@ -145,6 +145,8 @@ public class CargaDatos {
         long processedLines = 0;
 
         try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(csvFilePath)))) {
+            reader.readNext();
+
 
             String[] line;
             while ((line = reader.readNext()) != null) {

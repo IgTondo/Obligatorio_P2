@@ -13,12 +13,12 @@ public class DataResult {
     private ArrayList<Calificacion> calificaciones;
 
     public DataResult() {
-        this.peliculas = new OpenHashTable<>();
-        this.colecciones = new OpenHashTable<>();
-        this.usuarios = new OpenHashTable<>();
-        this.actores = new OpenHashTable<>();
-        this.directores = new OpenHashTable<>();
-        this.calificaciones = new ArrayList<>();
+        this.peliculas = new OpenHashTable<>(16);
+        this.colecciones = new OpenHashTable<>(16);
+        this.usuarios = new OpenHashTable<>(16);
+        this.actores = new OpenHashTable<>(16);
+        this.directores = new OpenHashTable<>(16);
+        this.calificaciones = new ArrayList<>(16);
     }
 
     public OpenHashTable<Integer, Pelicula> getPeliculas() {

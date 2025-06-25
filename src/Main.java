@@ -72,8 +72,9 @@ public class Main {
                     um.topColeccionesMasIngresos();  // ✅ llamada al método real
                     break;
                 case "4":
-                    //call a la f4
+                    um.topDirectoresMejorCalificaciones();
                     break;
+
                 case "5":
                     //call a la f5
                     break;

@@ -55,9 +55,10 @@ public class Coleccion implements Comparable<Coleccion>{
     }
 
     @Override
-    public int compareTo(Coleccion coleccion) {
-        return 0;
+    public int compareTo(Coleccion otra) {
+        return Long.compare(otra.getIngresoTotal(), this.getIngresoTotal());
     }
+
 
     @Override
     public String toString() {
