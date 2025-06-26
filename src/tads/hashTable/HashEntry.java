@@ -53,11 +53,4 @@ public class HashEntry<K, V> implements Comparable<HashEntry<K, V>>{
                 '}';
     }
 
-    public K getKey() {
-        return key;
-    }
-
-    public V getValue() {
-        return value;
-    }
 }

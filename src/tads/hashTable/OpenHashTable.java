@@ -178,7 +178,6 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
 
     @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
-        System.out.println("Resize");
         int oldCapacity = this.capacity;
         LinkedList<HashEntry<K, V>>[] oldTable = this.table;
 

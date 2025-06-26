@@ -5,19 +5,11 @@ import tads.list.ArrayList;
 public class Director implements Comparable<Director>{
     private int idDirector;
     private String nombre;
-    private final ArrayList<Integer> peliculasDirigidas;
 
     //Constructor de la clase Director
-    public Director(int idDirector, String nombre, ArrayList<Integer> peliculasDirigidas) {
-        this.idDirector = idDirector;
-        this.nombre = nombre;
-        this.peliculasDirigidas = peliculasDirigidas;
-    }
-
     public Director(int idDirector, String nombre) {
         this.idDirector = idDirector;
         this.nombre = nombre;
-        this.peliculasDirigidas = new ArrayList<>(50);
     }
 
     //Getter de la id del director
@@ -40,16 +32,6 @@ public class Director implements Comparable<Director>{
         this.nombre = nombre;
     }
 
-    //Getter de la lista de las películas que dirigió el director
-    public ArrayList<Integer> getPeliculasDirigidas() {
-        return peliculasDirigidas;
-    }
-
-    //Setter de la lista de las películas que dirigió el director
-    public void addPelicula(int idPelicula) {
-        this.peliculasDirigidas.add(idPelicula);
-    }
-
     @Override
     public int compareTo(Director director) {
         return 0;
@@ -60,7 +42,6 @@ public class Director implements Comparable<Director>{
         return "Director{" +
                 "idDirector=" + idDirector +
                 ", nombre='" + nombre + '\'' +
-                ", peliculasDirigidas=" + peliculasDirigidas +
                 '}';
     }
 }

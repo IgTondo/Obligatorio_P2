@@ -149,7 +149,6 @@ public class CargaDatos {
         long processedLines = 0;
 
         try (CSVReader reader = new CSVReader(new BufferedReader(new FileReader(csvFilePath)))) {
-            reader.readNext();
 
 
             String[] line;
@@ -253,7 +252,6 @@ public class CargaDatos {
                                     directores.put(dir.getIdDirector(), dir);
                                 }
                                 movie.addDirector(dir.getIdDirector());
-                                dir.addPelicula(movieId);
                             }
                         }catch (Exception parseE){
                             System.err.println("Parsing error for director on line " + processedLines + ": " + parseE.getMessage());
