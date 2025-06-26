@@ -23,16 +23,14 @@ public class Pelicula implements Comparable<Pelicula>{
         this.idiomaOriginal = idiomaOriginal;
         this.genero = genero;
         this.directores = new ArrayList<>(5);
+        this.actores = new ArrayList<>(50);
         this.ingreso = ingreso;
         this.numRating = 0;
     }
 
-    //Getter del id de la película
     public int getIdPelicula() {
         return idPelicula;
     }
-
-    //Setter del id de la película
     public void setIdPelicula(int idPelicula) {
         this.idPelicula = idPelicula;
     }
@@ -40,57 +38,41 @@ public class Pelicula implements Comparable<Pelicula>{
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    //Getter de la fecha de estreno de la película
     public LocalDate getFechaDeEstreno() {
         return fechaDeEstreno;
     }
-
-    //Setter de la fecha de estreno de la película
     public void setFechaDeEstreno(LocalDate fechaDeEstreno) {
         this.fechaDeEstreno = fechaDeEstreno;
     }
 
-    //Getter del idioma original de la película
     public String getIdiomaOriginal() {
         return idiomaOriginal;
     }
-
-    //Setter del idioma original de la película
     public void setIdiomaOriginal(String idiomaOriginal) {
         this.idiomaOriginal = idiomaOriginal;
     }
 
-    //Getter del género de la película
     public ArrayList<String> getGenero() {
         return genero;
     }
-
-    //Setter del género de la película
     public void setGenero(ArrayList<String> genero) {
         this.genero = genero;
     }
 
-    //Getter del director de la película
     public ArrayList<Integer> getDirectores() {
         return directores;
     }
-
-    //Setter del director de la película
     public void addDirector(int director) {
         this.directores.add(director);
     }
 
-    //Getter del ingreso de la película
     public long getIngreso() {
         return ingreso;
     }
-
-    //Setter del director de la película
     public void setIngreso(long ingreso) {
         this.ingreso = ingreso;
     }
@@ -98,7 +80,6 @@ public class Pelicula implements Comparable<Pelicula>{
     public int getNumRating() {
         return numRating;
     }
-
     public void addNumRating() {
         this.numRating++;
     }

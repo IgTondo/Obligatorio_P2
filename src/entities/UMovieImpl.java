@@ -2,13 +2,10 @@ package entities;
 
 import entities.cargaDatos.CargaDatos;
 import tads.hashTable.HashEntry;
-import org.apache.commons.lang3.tuple.Pair;
 import tads.hashTable.OpenHashTable;
 import tads.list.ArrayList;
 import tads.list.linked.LinkedList;
 import tads.tree.heap.HeapArray;
-
-import java.util.Map;
 
 
 public class UMovieImpl implements UMovie{
@@ -36,9 +33,6 @@ public class UMovieImpl implements UMovie{
         this.calificaciones = dr.getCalificaciones();
         this.actores = dr.getActores();
         this.directores = dr.getDirectores();
-        OpenHashTable[] temp = (OpenHashTable[]) CargaDatos.cargaDatos(); // Cast explícito
-        this.peliculas = temp[0];
-        this.colecciones = temp[1];
     }
 
 
@@ -176,28 +170,15 @@ public class UMovieImpl implements UMovie{
         */
     }
 
-    public void ActorMasCalificacionesPorMes(){
-
-        ArrayList<Integer> peliculasMes = new ArrayList<>();
-
-        for (int i = 1; i <13 ; i++) {
-
-            peliculasMes = buscarCalificacionesPorMes(i);
-        }
-
+    public void ActorMasCalificacionesPorMes() {
 
         /*
         Actor con más calificaciones recibidas en cada mes del año.
-         Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
+        Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
 
-         <mes>,<nombre_actor>,<cantidad_peliculas>,<cantidad de calificaciones>
-         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
+        <mes>,<nombre_actor>,<cantidad_peliculas>, <cantidad de calificaciones>
+        Tiempo de ejecución de la consulta: <tiempo_ejecucion>
          */
-    }
-
-    public void ActorMasVisto(ArrayList<Calificacion> calificacionesMes) {
-        for (Calificacion calificacion : calificacionesMes) {
-        }
     }
 
     public void usuariosMasCalificacionesPorGenero(){
@@ -213,8 +194,7 @@ public class UMovieImpl implements UMovie{
 
     public HeapArray<WrapperPelicula> buscarPeliculasPorIdioma(String idioma){
 
-        HeapArray<WrapperPelicula> peliculasIdioma = new HeapArray<>(false) {
-        };
+        HeapArray<WrapperPelicula> peliculasIdioma = new HeapArray<>(false);
 
         if (idioma == null || idioma.isBlank()){
             return peliculasIdioma;
@@ -233,24 +213,7 @@ public class UMovieImpl implements UMovie{
                     }
                 }
             }
-
         }
-
         return peliculasIdioma;
     }
-
-    public ArrayList<Integer> buscarCalificacionesPorMes(int mes){
-
-        ArrayList<Integer> calificacionesMes = new ArrayList<>();
-
-        for (Calificacion calificacion : calificaciones) {
-            if (calificacion.getFechaCalificacion().getMonthValue() == mes) {
-                calificacionesMes.add(calificacion.getIdPelicula());
-            }
-        }
-
-        return calificacionesMes;
-    }
-
-
 }

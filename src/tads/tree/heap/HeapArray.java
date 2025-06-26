@@ -1,7 +1,6 @@
 package tads.tree.heap;
 
 import tads.list.ArrayList;
-import tads.list.List;
 
 public class HeapArray<T extends Comparable<T>> implements MyHeap<T>{
     private ArrayList<T> heap;
@@ -33,20 +32,12 @@ public class HeapArray<T extends Comparable<T>> implements MyHeap<T>{
             // Tomar el último elemento
             T ultimo = heap.remove(heap.length() - 1);
             // Ponerlo en la raíz
-            heap.set(0, ultimo);  // CORRECCIÓN: usar set() en lugar de add()
+            heap.set(0, ultimo);
             // Reordenar hacia abajo
             downHeap(0);
         }
 
         return raiz;
-    }
-
-    // Devuelve el elemento raíz sin removerlo
-    public T peek() {
-        if (heap.isEmpty()) {
-            throw new RuntimeException("El heap está vacío.");
-        }
-        return heap.get(0);
     }
 
     // Verifica si el heap está vacío

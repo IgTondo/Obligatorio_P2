@@ -19,7 +19,6 @@ package entities;
 
      @Override
      public int compareTo(WrapperPelicula other) {
-         // Para MaxHeap: el de MAYOR rating queda arriba
          return Integer.compare(this.numRating, other.numRating);
      }
 }
