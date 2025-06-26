@@ -6,10 +6,9 @@ import tads.hashTable.OpenHashTable;
 import tads.list.ArrayList;
 import tads.list.linked.LinkedList;
 
-import java.sql.Array;
+import java.time.Month;
 
-
-public class UMovieImpl implements UMovie{
+public class UMovieImpl implements UMovie {
     public OpenHashTable<Integer, Pelicula> peliculas;
     public OpenHashTable<Integer, Actor> actores;
     public OpenHashTable<Integer, Usuario> usuarios;
@@ -17,7 +16,7 @@ public class UMovieImpl implements UMovie{
     public OpenHashTable<Integer, Director> directores;
     public ArrayList<Calificacion> calificaciones;
 
-    public UMovieImpl(){
+    public UMovieImpl() {
         this.peliculas = new OpenHashTable<>();
         this.actores = new OpenHashTable<>();
         this.usuarios = new OpenHashTable<>();
@@ -26,7 +25,7 @@ public class UMovieImpl implements UMovie{
         this.calificaciones = new ArrayList<>();
     }
 
-    public void cargaDatos(){
+    public void cargaDatos() {
         DataResult dr = CargaDatos.cargaDatos();
         this.peliculas = dr.getPeliculas();
         this.colecciones = dr.getColecciones();
@@ -38,7 +37,7 @@ public class UMovieImpl implements UMovie{
     }
 
 
-    public void topPeliculasMasCalificacionesPorIdioma(){
+    public void topPeliculasMasCalificacionesPorIdioma() {
 
         /*
         Top 5 de las películas que más calificaciones por idioma.
@@ -74,7 +73,7 @@ public class UMovieImpl implements UMovie{
                 cont = new Contador();
                 conteoCalificaciones.put(idPelicula, cont);
                 sumaPuntajes.put(idPelicula, puntaje);
-            }else {
+            } else {
                 puntaje += sumaPuntajes.get(idPelicula);
                 sumaPuntajes.delete(idPelicula);
                 sumaPuntajes.put(idPelicula, puntaje);
@@ -105,11 +104,11 @@ public class UMovieImpl implements UMovie{
         for (int i = 0; i < 10; i++) {
             Pelicula p = candidatas.get(i);
             float promedio = p.getPromedioCalificaciones();
-            System.out.println(p.getIdPelicula()+", "+p.getNombre()+", "+promedio);
+            System.out.println(p.getIdPelicula() + ", " + p.getNombre() + ", " + promedio);
         }
     }
 
-    public void topColeccionesMasIngresos(){
+    public void topColeccionesMasIngresos() {
 
         /*
         Top 5 de las colecciones que más ingresos generaron.
@@ -122,7 +121,7 @@ public class UMovieImpl implements UMovie{
         ArrayList<Coleccion> collections = colecciones.getValues();
         ArrayList<Coleccion> filtered = new ArrayList<>(collections.length());
         // Calcular ingreso total por colección
-        for (int i = 0; i<collections.length(); i++) {
+        for (int i = 0; i < collections.length(); i++) {
             long ingresoTotal = 0;
             Coleccion c = collections.get(i);
             ArrayList<Integer> idsPelis = c.getIdsPeliculas();
@@ -134,7 +133,7 @@ public class UMovieImpl implements UMovie{
             }
 
 
-            if (ingresoTotal > 0){
+            if (ingresoTotal > 0) {
                 c.setIngresoTotal(ingresoTotal);
                 filtered.add(c);
             }
@@ -158,7 +157,7 @@ public class UMovieImpl implements UMovie{
         }
     }
 
-    public void topDirectoresMejorCalificaciones(){
+    public void topDirectoresMejorCalificaciones() {
 
         /*
         Top 10 de los directores que mejor calificación tienen.
@@ -169,7 +168,7 @@ public class UMovieImpl implements UMovie{
         */
     }
 
-    public void actorMasCalificacionesPorMes(){
+    public void actorMasCalificacionesPorMes() {
 
         /*
         Actor con más calificaciones recibidas en cada mes del año.
@@ -178,6 +177,80 @@ public class UMovieImpl implements UMovie{
          <mes>,<nombre_actor>,<cantidad_peliculas>,<cantidad de calificaciones>
          Tiempo de ejecución de la consulta: <tiempo_ejecucion>
          */
+        OpenHashTable<Month, OpenHashTable<Integer, Contador>> mesActorCont = new OpenHashTable<>(16);
+        OpenHashTable<Month, Contador> mesCantPeliculas = new OpenHashTable<>(16);
+
+//        ArrayList<Actor> actoresList = actores.getValues();
+
+        for (int i = 0; i < calificaciones.length(); i++) {
+            Calificacion c = calificaciones.get(i);
+            Pelicula movie = peliculas.get(c.getIdPelicula());
+            if (movie == null) {
+                continue;
+            }
+
+            Month mes = c.getFechaCalificacion().getMonth();
+            ArrayList<Integer> actoresList = movie.getActores();
+
+            Contador peliCont = mesCantPeliculas.get(mes);
+            if (peliCont == null){
+                peliCont = new Contador();
+                mesCantPeliculas.put(mes, peliCont);
+            }
+            peliCont.incrementar();
+
+            for (int j = 0; j < actoresList.length(); j++) {
+                int actorId = actoresList.get(j);
+                Actor actor = actores.get(actorId);
+                if (actor == null) {
+                    continue;
+                }
+
+
+                OpenHashTable<Integer, Contador> actorCont = mesActorCont.get(mes);
+                if (actorCont == null) {
+                    actorCont = new OpenHashTable<>(50000);
+                    mesActorCont.put(mes, actorCont);
+                }
+
+                Contador cont = actorCont.get(actorId);
+                if (cont == null) {
+                    cont = new Contador();
+                    actorCont.put(actorId, cont);
+                }
+                cont.incrementar();
+            }
+        }
+
+
+        for (Month mes : Month.values()){
+            OpenHashTable<Integer, Contador> actorCont = mesActorCont.get(mes);
+            if (actorCont == null) continue;
+            ArrayList<Integer> topActoresId = new ArrayList<>();
+            int maxCount = 0;
+
+            for (LinkedList<HashEntry<Integer, Contador>> bucket : actorCont.getTable()) {
+                if (bucket == null) continue;
+                for (HashEntry<Integer, Contador> entry : bucket) {
+                    int count = entry.getValue().getCount();
+                    if (count > maxCount) {
+                        maxCount = count;
+                        topActoresId = new ArrayList<>();
+                        topActoresId.add(entry.getKey());
+                    } else if (count == maxCount) {
+                        topActoresId.add(entry.getKey());
+                    }
+                }
+            }
+
+            for (int idActor : topActoresId){
+              Actor actor = actores.get(idActor);
+              int cantPelis = mesCantPeliculas.get(mes).getCount();
+              String nombreActor = actor.getNombre();
+                System.out.println(mes.toString() + ", " + nombreActor + ", " + cantPelis + ", " + maxCount);
+            }
+        }
+
     }
 
     public void usuariosMasCalificacionesPorGenero(){
@@ -273,6 +346,4 @@ public class UMovieImpl implements UMovie{
             System.out.println();
         }
     }
-
-
 }
