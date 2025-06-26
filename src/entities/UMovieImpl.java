@@ -166,6 +166,52 @@ public class UMovieImpl implements UMovie {
         <nombre_director>,<cantidad_peliculas>,<mediana_calificacion>
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
+
+        ArrayList<DirectorEstadistica> estadisticas = new ArrayList<>();
+
+        ArrayList<Director> directoresLista = directores.getValues();
+
+        for (int i = 0; i < directoresLista.length(); i++) {
+            Director d = directoresLista.get(i);
+            ArrayList<Integer> pelis = d.getPeliculasDirigidas();
+
+            ArrayList<Float> califs = new ArrayList<>();
+
+            for (int j = 0; j < pelis.length(); j++) {
+                int idPeli = pelis.get(j);
+                Pelicula p = peliculas.get(idPeli);
+                if (p == null) continue;
+
+                for (int k = 0; k < calificaciones.length(); k++) {
+                    Calificacion c = calificaciones.get(k);
+                    if (c.getIdPelicula() == idPeli) {
+                        califs.add(c.getPuntaje());
+                    }
+                }
+            }
+
+            if (califs.length() > 0) {
+                califs.sort();
+                float mediana;
+                int mid = califs.length() / 2;
+                if (califs.length() % 2 == 0) {
+                    mediana = (califs.get(mid - 1) + califs.get(mid)) / 2;
+                } else {
+                    mediana = califs.get(mid);
+                }
+
+                estadisticas.add(new DirectorEstadistica(d.getNombre(), pelis.length(), mediana));
+            }
+        }
+
+        estadisticas.sort(); // Ordena por mediana descendente
+
+        for (int i = 0; i < 10 && i < estadisticas.length(); i++) {
+
+            DirectorEstadistica d = estadisticas.get(i);
+            System.out.println(d.getNombre());
+            System.out.println(d.getNombre() + "," + d.getCantPeliculas() + "," + d.getMediana());
+        }
     }
 
     public void actorMasCalificacionesPorMes() {
