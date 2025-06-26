@@ -211,7 +211,6 @@ public class OpenHashTable<K, V extends Comparable<V>> implements HashTable<K, V
         return table;
     }
 
-
     @Override
     public String toString() {
         return "OpenHashTable{" +

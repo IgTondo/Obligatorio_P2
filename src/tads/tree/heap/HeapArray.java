@@ -1,10 +1,9 @@
 package tads.tree.heap;
 
 import tads.list.ArrayList;
-import tads.list.List;
 
 public class HeapArray<T extends Comparable<T>> implements MyHeap<T>{
-    private List<T> heap;
+    private ArrayList<T> heap;
     private boolean isMinHeap;
 
     public HeapArray(boolean isMinHeap) {
@@ -23,15 +22,27 @@ public class HeapArray<T extends Comparable<T>> implements MyHeap<T>{
         if (heap.isEmpty()) {
             throw new RuntimeException("El heap está vacío.");
         }
-        T raiz = heap.get(0);
-        T ultimo = heap.remove(heap.length() - 1);
 
-        if (!heap.isEmpty()) {
-            heap.add(ultimo, 0);
+        T raiz = heap.get(0);
+
+        if (heap.length() == 1) {
+            // Si solo hay un elemento, simplemente lo removemos
+            heap.remove(0);
+        } else {
+            // Tomar el último elemento
+            T ultimo = heap.remove(heap.length() - 1);
+            // Ponerlo en la raíz
+            heap.set(0, ultimo);
+            // Reordenar hacia abajo
             downHeap(0);
         }
 
         return raiz;
+    }
+
+    // Verifica si el heap está vacío
+    public boolean isEmpty() {
+        return heap.isEmpty();
     }
 
     // Devuelve el tamaño actual
@@ -87,7 +98,7 @@ public class HeapArray<T extends Comparable<T>> implements MyHeap<T>{
 
     private void swap(int i, int j) {
         T temp = heap.get(i);
-        heap.add(heap.get(j), i);
-        heap.add(temp, j);
+        heap.set(i, heap.get(j));  // CORRECCIÓN: usar set() en lugar de add()
+        heap.set(j, temp);         // CORRECCIÓN: usar set() en lugar de add()
     }
 }

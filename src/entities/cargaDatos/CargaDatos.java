@@ -181,6 +181,13 @@ public class CargaDatos {
                         usuarios.put(userId, user);
                     }
                     user.addCalificacion(cal);
+
+                    // --- Update Movie object ---
+                    Pelicula pelicula = peliculas.get(movieId);
+                    if (pelicula == null) {
+                    } else{
+                        pelicula.addNumRating();
+                    }
                 } catch (NumberFormatException e) {
                     System.err.println("Data parsing error on ratings line " + processedLines + ": " + e.getMessage() + " - Line: " + String.join(",", line));
                 }

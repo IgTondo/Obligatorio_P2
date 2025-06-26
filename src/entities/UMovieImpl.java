@@ -7,6 +7,7 @@ import tads.list.ArrayList;
 import tads.list.linked.LinkedList;
 
 import java.time.Month;
+import tads.tree.heap.HeapArray;
 
 public class UMovieImpl implements UMovie {
     public OpenHashTable<Integer, Pelicula> peliculas;
@@ -38,6 +39,12 @@ public class UMovieImpl implements UMovie {
 
 
     public void topPeliculasMasCalificacionesPorIdioma() {
+        String[] idiomas = {"en", "es", "fr", "pt", "it"};
+        String[] nombresIdiomas = {"inglés", "español", "francés", "portugués", "italiano"};
+
+        for (int i = 0; i < idiomas.length; i++) {
+            mostrarTop5Idioma(idiomas[i], nombresIdiomas[i]);
+        }
 
         /*
         Top 5 de las películas que más calificaciones por idioma.
@@ -47,7 +54,33 @@ public class UMovieImpl implements UMovie {
         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
         */
 
+    }
 
+    private void mostrarTop5Idioma(String idioma, String nombreIdioma) {
+        HeapArray<WrapperPelicula> peliculasIdioma = buscarPeliculasPorIdioma(idioma);
+
+        if (peliculasIdioma == null || peliculasIdioma.isEmpty()) {
+            System.out.println("No hay películas en " + nombreIdioma);
+            System.out.println();
+            return;
+        }
+
+        System.out.println("Top 5 películas en " + nombreIdioma + ":");
+
+        for (int i = 1; i <= 5; i++) {                                      // Extraer hasta 5 películas (las de mayor rating)
+            try {
+                Integer idPelicula = peliculasIdioma.pop().getIdPelicula();
+                Pelicula pelicula = peliculas.get(idPelicula);
+
+                if (pelicula != null) {
+                    System.out.println(i + ", " + pelicula.getNombre() + ", " + pelicula.getNumRating() + ", " + nombreIdioma + "");
+                }
+            } catch (Exception e) {
+                // No hay más películas en la cola
+                break;
+            }
+        }
+        System.out.println();
     }
 
     public void topPeliculasMejorCalificacionMedia() {
@@ -218,10 +251,10 @@ public class UMovieImpl implements UMovie {
 
         /*
         Actor con más calificaciones recibidas en cada mes del año.
-         Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
+        Al seleccionar dicha opción se deberán mostrar los datos de la siguiente manera:
 
-         <mes>,<nombre_actor>,<cantidad_peliculas>,<cantidad de calificaciones>
-         Tiempo de ejecución de la consulta: <tiempo_ejecucion>
+        <mes>,<nombre_actor>,<cantidad_peliculas>, <cantidad de calificaciones>
+        Tiempo de ejecución de la consulta: <tiempo_ejecucion>
          */
         OpenHashTable<Month, OpenHashTable<Integer, Contador>> mesActorCont = new OpenHashTable<>(16);
         OpenHashTable<Month, Contador> mesCantPeliculas = new OpenHashTable<>(16);
@@ -391,5 +424,30 @@ public class UMovieImpl implements UMovie {
             }
             System.out.println();
         }
+    }
+
+    public HeapArray<WrapperPelicula> buscarPeliculasPorIdioma(String idioma){
+
+        HeapArray<WrapperPelicula> peliculasIdioma = new HeapArray<>(false);
+
+        if (idioma == null || idioma.isBlank()){
+            return peliculasIdioma;
+        }
+
+
+        for (int i = 0; i < peliculas.capacity(); i++) {
+            LinkedList<HashEntry<Integer,Pelicula>> bucket = peliculas.getTable()[i];
+            Pelicula p;
+            if (bucket != null) {                                   // Si el bucket es nulo se pasa al siguiente bucket
+                for (HashEntry<Integer,Pelicula> entry : bucket) {
+                    p = entry.getValue();
+                    if (p.getIdiomaOriginal().equals(idioma)) {
+                        WrapperPelicula pelicula = new WrapperPelicula(p.getIdPelicula(), p.getNumRating());
+                        peliculasIdioma.add(pelicula);
+                    }
+                }
+            }
+        }
+        return peliculasIdioma;
     }
 }
